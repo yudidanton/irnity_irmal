@@ -1,0 +1,18 @@
+{
+  "name": "iot-irmal-pwa",
+  "version": "1.0.0",
+  "description": "PWA Platform Pembelajaran IoT untuk Remaja Masjid",
+  "main": "index.html",
+  "scripts": {
+    "build": "node generate-icons.js",
+    "start": "http-server -p 8080 -c-1",
+    "deploy": "gh-pages -d ."
+  },
+  "dependencies": {
+    "sharp": "^0.32.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0",
+    "http-server": "^14.0.0"
+  }
+}

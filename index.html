@@ -1,0 +1,3036 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Pembelajaran IoT - IRMAL</title>
+    <link rel="manifest" href="manifest.json">
+    <!-- iOS Support -->
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="IoT IRMAL">
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="msapplication-navbutton-color" content="#2E7D32">
+    <meta name="msapplication-TileColor" content="#2E7D32">
+    <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS tetap sama seperti sebelumnya */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #2E7D32;
+            --primary-dark: #1B5E20;
+            --primary-light: #4CAF50;
+            --secondary-color: #1976D2;
+            --accent-color: #FF9800;
+            --light-color: #f8f9fa;
+            --dark-color: #333;
+            --gray-color: #666;
+            --light-gray: #eee;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            color: white;
+            padding: 1.2rem 1.5rem;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Tambahkan kode ini di bagian CSS untuk .logo atau .logo-container */
+        .logo img {
+            max-width: 50px;          /* Lebar maksimal logo */
+            max-height: 50px;         /* Tinggi maksimal logo */
+            width: auto;              /* Pertahankan rasio aspek */
+            height: auto;             /* Pertahankan rasio aspek */
+            border-radius: 30%;       /* Sudut melengkung (opsional) */
+            object-fit: contain;      /* Pastikan gambar tidak terdistorsi */
+        }
+
+        .logo-text h1 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+            margin-left: 5px
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-left: 5px
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .scroll-top-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-top-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--gray-color);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .page-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            background: linear-gradient(rgba(46, 125, 50, 0.9), rgba(46, 125, 50, 0.8)), url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.95;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .module-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .module-icon {
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .module-content {
+            padding: 1.5rem;
+        }
+
+        .module-badge {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary.orange {
+            background-color: #FF9800;
+        }
+
+        .btn-primary.orange:hover {
+            background-color: #F57C00;
+        }
+
+        .download-materials-container {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .download-card {
+            padding: 1.5rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .download-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .download-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .module-card h3 {
+            margin-bottom: 0.8rem;
+            color: var(--dark-color);
+        }
+
+        .module-progress {
+            height: 6px;
+            background-color: var(--light-gray);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .module-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        .module-nav {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0;
+            gap: 10px;
+        }
+
+        .module-nav button {
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .module-nav button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .back-to-modules {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 2rem;
+            text-decoration: none;
+        }
+
+        .back-to-modules:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .module-content-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .module-content-container h3 {
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .module-content-container h4 {
+            color: var(--secondary-color);
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .module-content-container p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .module-content-container ul, .module-content-container ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-content-container li {
+            margin-bottom: 0.8rem;
+        }
+
+        .analogy-box {
+            background-color: #E8F5E9;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .code-comment {
+            color: #888;
+        }
+
+        .quiz-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .quiz-section.active {
+            display: block;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .score-display {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .option {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            background-color: #f9f9f9;
+            border-color: #ccc;
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background-color: #E8F5E9;
+        }
+
+        .option.correct {
+            border-color: var(--primary-color);
+            background-color: #E8F5E9;
+        }
+
+        .option.incorrect {
+            border-color: #F44336;
+            background-color: #FFEBEE;
+        }
+
+        .feedback {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback.correct {
+            background-color: #E8F5E9;
+            border-left: 4px solid var(--primary-color);
+            color: var(--primary-dark);
+        }
+
+        .feedback.incorrect {
+            background-color: #FFEBEE;
+            border-left: 4px solid #F44336;
+            color: #C62828;
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .practice-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .practice-image {
+            height: 180px;
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .practice-content {
+            padding: 1.5rem;
+        }
+
+        .components-list {
+            margin-bottom: 1.5rem;
+        }
+
+        .components-list h4 {
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .practice-content h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .practice-content p {
+            margin-bottom: 1.5rem;
+            color: var(--gray-color);
+        }
+
+        .btn-secondary {
+            padding: 10px 20px;
+            background-color: white;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .wiring-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: var(--box-shadow);
+            display: none;
+        }
+
+        .wiring-image.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .wiring-preview-container {
+            display: none;
+            margin: 1.5rem 0;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .wiring-preview-container.active {
+            display: block;
+        }
+
+        .wiring-preview-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--light-gray);
+        }
+
+        .download-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .download-buttons {
+                flex-direction: column;
+            }
+            
+            .download-buttons button {
+                width: 100%;
+            }
+        }
+
+        .resource-page {
+            padding: 1rem;
+        }
+
+        .resource-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .resource-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-details h4 {
+            margin-bottom: 5px;
+            color: var(--dark-color);
+        }
+
+        .contact-details p {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: all 0.3s;
+        }
+
+        .link-item:hover {
+            background-color: #e9e9e9;
+            transform: translateX(5px);
+        }
+
+        .link-icon {
+            margin-right: 1rem;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .start-button-container {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .start-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        .start-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--light-gray);
+            margin-top: 2rem;
+        }
+
+        .copyright {
+            color: var(--primary-color);
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .modules-grid, .practice-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .module-nav {
+                flex-direction: column;
+            }
+            
+            .module-nav button {
+                width: 100%;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .quiz-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .quiz-navigation button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="original-icon.png">
+                </div>
+                <div class="logo-text">
+                    <h1>IRNITY</h1>
+                    <p>Ikhlas Resource Network for Innovation, Technology and Youth</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Home Page -->
+        <div id="homePage" class="page-content active">
+            <div class="hero">
+                <h2>Selamat Datang di Platform Pembelajaran IoT IRMAL</h2>
+                <p>Mengembangkan keterampilan teknologi masa depan dengan pendekatan Islami dan praktis</p>
+            </div>
+
+            <div class="module-content-container">
+                <h3>Tujuan Pembelajaran</h3>
+                <p>Platform ini dirancang untuk membantu Remaja Masjid Jami Al-Ikhlas (IRMAL) memahami teknologi Internet of Things (IoT) dengan cara yang mudah, praktis, dan bermanfaat untuk pengembangan masjid dan masyarakat.</p>
+                
+                <h3>Apa yang Akan Dipelajari?</h3>
+                <ul>
+                    <li><strong>Dasar-dasar IoT</strong> - Konsep, komponen, dan cara kerja sistem IoT</li>
+                    <li><strong>Sensor dan Aktuator</strong> - Mengenal berbagai jenis sensor dan aktuator</li>
+                    <li><strong>Mikrokontroler ESP32</strong> - Pemrograman dan aplikasi praktis</li>
+                    <li><strong>Display dan Interface</strong> - Membuat tampilan visual untuk sistem IoT</li>
+                    <li><strong>Konektivitas</strong> - WiFi, Bluetooth, dan komunikasi data</li>
+                    <li><strong>Proyek Praktis</strong> - Membangun sistem nyata untuk masjid</li>
+                </ul>
+                
+                <h3>Manfaat Belajar IoT</h3>
+                <div class="analogy-box">
+                    <h4>💡 Keuntungan yang Didapat:</h4>
+                    <ol>
+                        <li>Meningkatkan kreativitas dan inovasi dalam pengembangan teknologi</li>
+                        <li>Melatih logika pemrograman dan problem solving</li>
+                        <li>Bekal karir masa depan di bidang teknologi dan engineering</li>
+                        <li>Berkontribusi langsung untuk kemajuan masjid dan masyarakat</li>
+                        <li>Mengembangkan pola pikir ilmiah dan sistematis</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>10</h3>
+                    <p>Modul Pembelajaran</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-flask"></i></div>
+                    <h3>3</h3>
+                    <p>Proyek Praktik</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>10+</h3>
+                    <p>Remaja Terdaftar</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                    <h3>100%</h3>
+                    <p>Gratis & Terbuka</p>
+                </div>
+            </div>
+
+            <!-- Tombol Mulai di Beranda -->
+            <div class="start-button-container">
+                <button class="start-button" onclick="startLearning()">
+                    <i class="fas fa-play-circle"></i> Mulai Belajar Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- Modules Page -->
+        <div id="modulesPage" class="page-content">
+            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">Daftar Modul Pembelajaran</h2>
+            <div class="modules-grid" id="modulesList"></div>
+            
+            <!-- TAMBAHAN: Tombol Download Materi Lengkap -->
+            <div style="margin-top: 3rem; padding: 2rem; background: white; border-radius: var(--border-radius); box-shadow: var(--box-shadow);">
+                <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; text-align: center;">
+                    <i class="fas fa-download"></i> Download Materi Lengkap
+                </h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Materi Utama IoT -->
+                    <div style="padding: 1.5rem; border: 2px solid var(--light-gray); border-radius: 10px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                                <i class="fas fa-microchip" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--dark-color); margin-bottom: 5px;">Materi Utama IoT</h4>
+                                <p style="color: var(--gray-color); font-size: 0.9rem;">PDF Lengkap - 10 Modul</p>
+                            </div>
+                        </div>
+                        <p style="margin-bottom: 1.5rem; color: var(--dark-color);">
+                            Kumpulan lengkap 10 modul pembelajaran IoT untuk Remaja Masjid, mencakup dasar-dasar hingga proyek praktis.
+                        </p>
+                        <button class="btn-primary" onclick="downloadFullIoTMaterial()" style="width: 100%;">
+                            <i class="fas fa-file-pdf"></i> Download Materi Utama IoT (PDF)
+                        </button>
+                    </div>
+                    
+                    <!-- Materi Pendukung Elektronika -->
+                    <div style="padding: 1.5rem; border: 2px solid var(--light-gray); border-radius: 10px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #FF9800, #FF5722); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                                <i class="fas fa-bolt" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--dark-color); margin-bottom: 5px;">Materi Pendukung Elektronika</h4>
+                                <p style="color: var(--gray-color); font-size: 0.9rem;">PDF Lengkap - Dasar Elektronika</p>
+                            </div>
+                        </div>
+                        <p style="margin-bottom: 1.5rem; color: var(--dark-color);">
+                            Pemahaman dasar komponen elektronika yang diperlukan untuk mendukung pembelajaran IoT, lengkap dengan rumus dan contoh.
+                        </p>
+                        <button class="btn-primary" onclick="downloadElectronicsMaterial()" style="width: 100%; background-color: #FF9800;">
+                            <i class="fas fa-file-pdf"></i> Download Materi Elektronika (PDF)
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="analogy-box" style="margin-top: 1.5rem;">
+                    <h4>📚 Tips Belajar:</h4>
+                    <ul>
+                        <li>Download kedua materi sebagai referensi lengkap</li>
+                        <li>Pelajari materi elektronika dasar terlebih dahulu jika masih pemula</li>
+                        <li>Gunakan materi utama IoT sebagai panduan sistematis pembelajaran</li>
+                        <li>Print materi jika perlu untuk belajar offline</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module Content Page -->
+        <div id="moduleContentPage" class="page-content"></div>
+
+        <!-- Practice Page -->
+        <div id="practicePage" class="page-content">
+            <h2 style="margin-bottom: 1.5rem; color: var(--primary-color);">Proyek Praktik IoT</h2>
+            <div class="practice-grid">
+                <div class="practice-card">
+                    <div class="practice-image">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="practice-content">
+                        <h3>Sistem Penyiraman Tanaman Otomatis</h3>
+                        <p>Sistem otomatis yang menyiram tanaman berdasarkan kelembapan tanah dan jadwal waktu.</p>
+                        <div class="components-list">
+                            <h4>Komponen yang dibutuhkan:</h4>
+                            <ul>
+                                <li>ESP32 Dev Board</li>
+                                <li>Sensor Soil Moisture</li>
+                                <li>Relay 5V</li>
+                                <li>Pompa air mini 5V</li>
+                                <li>RTC DS3231</li>
+                                <li>Tombol tekan</li>
+                            </ul>
+                        </div>
+                        <button class="btn-primary" onclick="openPractice(1)">
+                            <i class="fas fa-play-circle"></i> Mulai Praktik
+                        </button>
+                    </div>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-image" style="background: linear-gradient(135deg, #2196F3, #00BCD4);">
+                        <i class="fas fa-hand-sparkles"></i>
+                    </div>
+                    <div class="practice-content">
+                        <h3>Kran Wudhu Otomatis</h3>
+                        <p>Sistem kran wudhu otomatis menggunakan sensor jarak untuk deteksi tangan dan swipe gesture untuk kontrol manual.</p>
+                        <div class="components-list">
+                            <h4>Komponen yang dibutuhkan:</h4>
+                            <ul>
+                                <li>ESP32 Dev Board</li>
+                                <li>2x VL53L0X Sensor Jarak</li>
+                                <li>OLED Display 128x64</li>
+                                <li>Relay 5V</li>
+                                <li>Solenoid Valve</li>
+                                <li>Tombol Factory Reset</li>
+                            </ul>
+                        </div>
+                        <button class="btn-primary" onclick="openPractice(2)">
+                            <i class="fas fa-play-circle"></i> Mulai Praktik
+                        </button>
+                    </div>
+                </div>
+
+                <div class="practice-card">
+                    <div class="practice-image" style="background: linear-gradient(135deg, #FFC107, #FF9800);">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="practice-content">
+                        <h3>Sistem Lampu Otomatis Masjid</h3>
+                        <p>Sistem pengendalian lampu masjid otomatis berdasarkan sensor cahaya dan gerak.</p>
+                        <div class="components-list">
+                            <h4>Komponen yang dibutuhkan:</h4>
+                            <ul>
+                                <li>ESP32</li>
+                                <li>Sensor PIR (gerak)</li>
+                                <li>Sensor LDR (cahaya)</li>
+                                <li>Relay modul 2 channel</li>
+                                <li>Lampu LED 220V</li>
+                            </ul>
+                        </div>
+                        <button class="btn-primary" onclick="openPractice(3)">
+                            <i class="fas fa-play-circle"></i> Segera Hadir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resource Page -->
+        <div id="resourcePage" class="page-content">
+            <div class="resource-page">
+                <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">Sumber Daya & Dukungan</h2>
+                
+                <div class="resource-card">
+                    <h3><i class="fas fa-download"></i> Instalasi Software & Library</h3>
+                    <h4>1. Instalasi Arduino IDE</h4>
+                    <ol>
+                        <li>Download Arduino IDE dari <a href="https://www.arduino.cc/en/software" target="_blank">arduino.cc</a></li>
+                        <li>Instal sesuai sistem operasi (Windows/Mac/Linux)</li>
+                        <li>Buka Arduino IDE dan tambahkan ESP32 board:
+                            <div class="code-block">
+                                File → Preferences → Additional Boards Manager URLs<br>
+                                Tambahkan: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+                            </div>
+                        </li>
+                        <li>Tools → Board → Boards Manager → Cari "ESP32" → Install</li>
+                    </ol>
+                    
+                    <h4>2. Library yang Diperlukan</h4>
+                    <ul>
+                        <li><strong>Adafruit SSD1306</strong> - Untuk OLED display</li>
+                        <li><strong>Adafruit GFX Library</strong> - Graphics library</li>
+                        <li><strong>VL53L0X</strong> - Sensor jarak</li>
+                        <li><strong>RTClib</strong> - Untuk RTC DS3231</li>
+                        <li><strong>WiFi</strong> - Sudah termasuk dalam ESP32</li>
+                        <li><strong>WebServer</strong> - Untuk web dashboard</li>
+                        <li><strong>Dan lainnya</strong> - Yang relevan dengan proyek yang dikerjakan</li>
+
+                    </ul>
+                    <p>Cara instal library: Sketch → Include Library → Manage Libraries → Cari nama library → Install</p>
+                </div>
+                
+                <div class="resource-card">
+                    <h3><i class="fas fa-external-link-alt"></i> Link Pembelajaran Eksternal</h3>
+                    
+                    <a href="https://www.instructables.com/member/ESP32/projects/" target="_blank" class="link-item">
+                        <div class="link-icon"><i class="fas fa-project-diagram"></i></div>
+                        <div>
+                            <strong>Instructables - Proyek ESP32</strong>
+                            <p>Koleksi proyek IoT dengan ESP32</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://randomnerdtutorials.com/projects-esp32/" target="_blank" class="link-item">
+                        <div class="link-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div>
+                            <strong>Random Nerd Tutorials</strong>
+                            <p>Tutorial lengkap ESP32 untuk pemula</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.youtube.com/c/GreatScottLab" target="_blank" class="link-item">
+                        <div class="link-icon"><i class="fab fa-youtube"></i></div>
+                        <div>
+                            <strong>GreatScott! YouTube Channel</strong>
+                            <p>Video tutorial elektronik dan IoT</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://github.com/espressif/arduino-esp32" target="_blank" class="link-item">
+                        <div class="link-icon"><i class="fab fa-github"></i></div>
+                        <div>
+                            <strong>ESP32 Arduino GitHub</strong>
+                            <p>Repository resmi ESP32 untuk Arduino</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="resource-card">
+                    <h3><i class="fas fa-hands-helping"></i> Dukungan Pembimbing</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Pembimbing: Yudi Danton</h4>
+                            <p>Technical Support Masjid Al-Ikhlas</p>
+                            <button class="whatsapp-btn" onclick="openWhatsApp('6287756787423', 'Bang Yudi')">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h4>Pendamping: Ust. Abroruddin</h4>
+                            <p>Pembina IRMAL & Pendamping Kegiatan</p>
+                            <button class="whatsapp-btn" onclick="openWhatsApp('6287773858086', 'Ust. Abroruddin')">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="analogy-box">
+                        <h4>📞 Etika Menghubungi Pembimbing:</h4>
+                        <ul>
+                            <li>Salam dan perkenalkan diri terlebih dahulu</li>
+                            <li>Sampaikan pertanyaan dengan jelas</li>
+                            <li>Gunakan bahasa yang sopan dan santun</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" data-page="homePage">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="#" class="nav-item" data-page="modulesPage">
+            <i class="fas fa-book"></i>
+            <span>Modul</span>
+        </a>
+        <a href="#" class="nav-item" data-page="practicePage">
+            <i class="fas fa-code"></i>
+            <span>Praktik</span>
+        </a>
+        <a href="#" class="nav-item" data-page="resourcePage">
+            <i class="fas fa-headphones"></i>
+            <span>Dukungan</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="copyright">
+            © 2025 IRNITY. Hak Cipta Dilindungi.<br>
+            Platform Pembelajaran IoT untuk Remaja Masjid Jami Al-Ikhlas
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // DATA MODUL YANG TERORGANISIR (MODUL 1-10)
+        // ============================================
+        const modulesData = [
+            {
+                id: 1,
+                title: "Pengenalan Dasar IoT",
+                icon: "fas fa-globe",
+                description: "Memahami konsep dasar Internet of Things, komponen, dan cara kerjanya.",
+                content: `
+                    <h3>Materi 1: Pendahuluan Internet of Things (IoT)</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Internet of Things (IoT) adalah teknologi yang menghubungkan perangkat-perangkat fisik ke internet, memungkinkan mereka untuk saling berkomunikasi dan berbagi data. Teknologi ini sangat relevan untuk remaja masjid karena dapat digunakan untuk membuat sistem otomatis di masjid seperti pengatur jadwal adzan, monitoring air wudhu, atau sistem pencahayaan cerdas yang hemat energi.</p>
+                    
+                    <h4>5 Poin Penting:</h4>
+                    <ol>
+                        <li><strong>Definisi IoT</strong> IoT adalah jaringan perangkat fisik yang dilengkapi dengan sensor, software, dan teknologi lain untuk terhubung dan bertukar data dengan perangkat lain melalui internet. Contohnya: jam pintar, lampu yang bisa dikontrol lewat HP, atau sistem keamanan rumah otomatis.</li>
+                        <li><strong>Sejarah IoT</strong> Konsep IoT pertama kali muncul tahun 1982 dengan mesin Coca-Cola di Carnegie Mellon University yang bisa melaporkan isinya. Istilah "Internet of Things" baru dipopulerkan oleh Kevin Ashton tahun 1999. Sejak 2010-an, IoT berkembang pesat seiring murahnya sensor dan koneksi internet.</li>
+                        <li><strong>Sistem Kerja IoT</strong> IoT bekerja dengan 4 komponen utama: (1) Sensor untuk mengumpulkan data, (2) Koneksi internet untuk mengirim data, (3) Pemrosesan data di cloud atau server, (4) Aktuator atau tampilan untuk memberikan output/aksi. Contoh: sensor gerak mendeteksi jamaah → kirim data → server proses → lampu masjid menyala otomatis.</li>
+                        <li><strong>Contoh Penerapan IoT</strong> Di kehidupan sehari-hari: smartwatch, Google Home, kamera CCTV online. Di masjid bisa diterapkan untuk: jadwal adzan otomatis, monitoring donasi digital, sistem parkir pintar, kontrol AC berdasarkan jumlah jamaah, atau pengingat waktu sholat di smartphone jamaah.</li>
+                        <li><strong>Manfaat IoT</strong> IoT memberikan efisiensi waktu dan energi, meningkatkan kenyamanan, menghemat biaya operasional, memudahkan monitoring jarak jauh, dan memberikan data untuk pengambilan keputusan yang lebih baik. Untuk masjid: hemat listrik, pelayanan jamaah lebih baik, dan pengelolaan lebih mudah.</li>
+                    </ol>
+                    
+                    <div class="analogy-box">
+                        <h4>💡 Definisi sederhana:</h4>
+                        <p>IoT adalah konsep di mana benda-benda fisik bisa terhubung ke internet dan saling berkomunikasi.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa kepanjangan dari IoT?",
+                        options: ["Internet of Things", "Internet of Technology", "Integrated Online Technology", "Internet of Tools"],
+                        correct: 0,
+                        explanation: "IoT adalah singkatan dari Internet of Things, yang berarti Internet untuk Segala Benda."
+                    },
+                    {
+                        question: "Siapa yang pertama kali mempopulerkan istilah \"Internet of Things\"?",
+                        options: ["Bill Gates", "Steve Jobs", "Mark Zuckerberg", "Kevin Ashton"],
+                        correct: 3,
+                        explanation: "Kevin Ashton mempopulerkan istilah \"Internet of Things\" pada tahun 1999."
+                    },
+                    {
+                        question: "Berapa komponen utama dalam sistem kerja IoT?",
+                        options: ["2 komponen", "3 komponen", "4 komponen", "5 komponen"],
+                        correct: 2,
+                        explanation: "IoT bekerja dengan 4 komponen utama: sensor, koneksi internet, pemrosesan data, dan aktuator/tampilan."
+                    },
+                    {
+                        question: "Manakah yang BUKAN contoh penerapan IoT di masjid?",
+                        options: ["Jadwal adzan otomatis", "Buku catatan manual", "Monitoring donasi digital", "Sistem parkir pintar"],
+                        correct: 1,
+                        explanation: "Buku catatan manual bukan contoh penerapan IoT karena tidak melibatkan teknologi IoT."
+                    },
+                    {
+                        question: "Apa manfaat utama IoT untuk pengelolaan masjid?",
+                        options: ["Membuat masjid terlihat modern saja", "Efisiensi energi dan kemudahan monitoring", "Mengganti semua petugas masjid", "Hanya untuk hiasan"],
+                        correct: 1,
+                        explanation: "IoT memberikan efisiensi energi dan kemudahan monitoring untuk pengelolaan masjid yang lebih baik."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Sensor dalam IoT",
+                icon: "fas fa-thermometer-half",
+                description: "Mengenal berbagai jenis sensor dan fungsinya dalam sistem IoT.",
+                content: `
+                    <h3>Materi 2: Sensor dalam IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Sensor adalah "mata dan telinga" dari sistem IoT yang berfungsi menangkap kondisi lingkungan dan mengubahnya menjadi data digital. Dalam konteks masjid, sensor sangat berguna untuk mendeteksi kehadiran jamaah, suhu ruangan, kelembaban, kualitas udara, hingga level air di tempat wudhu. Memahami sensor adalah langkah penting dalam membangun sistem IoT yang efektif.</p>
+                    
+                    <h4>5 Poin Penting:</h4>
+                    <ol>
+                        <li><strong>Definisi Sensor</strong> Sensor adalah perangkat yang dapat mendeteksi perubahan fisik di lingkungan (seperti suhu, cahaya, gerakan, suara) dan mengubahnya menjadi sinyal listrik yang bisa dibaca oleh mikrokontroler. Sensor bertindak sebagai "indra" bagi sistem IoT untuk memahami kondisi sekitarnya.</li>
+                        <li><strong>Fungsi Sensor dalam IoT</strong> Sensor berfungsi untuk: mengumpulkan data dari lingkungan, mengubah besaran fisik menjadi sinyal digital, memberikan input untuk pengambilan keputusan sistem, memicu aksi otomatis, dan monitoring kondisi real-time. Misalnya sensor PIR mendeteksi gerakan jamaah untuk menyalakan lampu otomatis.</li>
+                        <li><strong>Jenis-jenis Sensor</strong> Berbagai jenis sensor: (1) Sensor suhu (DHT22, LM35), (2) Sensor gerak/PIR untuk deteksi kehadiran, (3) Sensor cahaya/LDR untuk mengukur intensitas cahaya, (4) Sensor jarak (Ultrasonic) untuk mengukur ketinggian air, (5) Sensor kelembaban untuk kontrol AC. Setiap sensor punya kegunaan spesifik.</li>
+                        <li><strong>Cara Kerja Sensor</strong> Sensor bekerja dengan prinsip: mendeteksi perubahan fisik → mengubah ke sinyal analog → dikonversi ke digital (ADC) → dikirim ke mikrokontroler → data diproses → menghasilkan output. Contoh: sensor suhu DHT22 membaca suhu 28°C → kirim data → Arduino proses → jika >27°C nyalakan kipas.</li>
+                        <li><strong>Tips Memilih Sensor yang Tepat</strong> Pertimbangkan: (1) Akurasi yang dibutuhkan, (2) Range pengukuran yang sesuai, (3) Konsumsi daya (penting untuk baterai), (4) Harga dan ketersediaan, (5) Kemudahan penggunaan dan kompatibilitas. Untuk pemula, pilih sensor yang banyak tutorialnya seperti DHT22 atau sensor PIR.</li>
+                    </ol>
+                    
+                    <div class="analogy-box">
+                        <h4>💡 Penjelasan sederhana:</h4>
+                        <p>Sensor itu seperti <em>indera</em> pada manusia (mata, telinga, kulit), yang memberi informasi ke otak agar bisa memutuskan sesuatu.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa fungsi utama sensor dalam sistem IoT?",
+                        options: ["Menampilkan data di layar", "Mendeteksi perubahan fisik dan mengubahnya menjadi sinyal listrik", "Menyimpan data di cloud", "Menghubungkan ke internet"],
+                        correct: 1,
+                        explanation: "Sensor berfungsi mendeteksi perubahan fisik di lingkungan dan mengubahnya menjadi sinyal listrik."
+                    },
+                    {
+                        question: "Sensor apakah yang cocok untuk mendeteksi kehadiran jamaah di masjid?",
+                        options: ["Sensor suhu (DHT22)", "Sensor cahaya (LDR)", "Sensor gerak (PIR)", "Sensor kelembaban"],
+                        correct: 2,
+                        explanation: "Sensor PIR (Passive Infrared) cocok untuk mendeteksi gerakan dan kehadiran manusia."
+                    },
+                    {
+                        question: "Apa kepanjangan dari PIR dalam sensor PIR?",
+                        options: ["Passive Infrared", "Power Infrared Receiver", "Positive Internal Resistance", "Passive Internal Reader"],
+                        correct: 0,
+                        explanation: "PIR adalah singkatan dari Passive Infrared."
+                    },
+                    {
+                        question: "Sensor ultrasonic biasanya digunakan untuk mengukur apa?",
+                        options: ["Suhu ruangan", "Intensitas cahaya", "Jarak atau ketinggian", "Kelembaban udara"],
+                        correct: 2,
+                        explanation: "Sensor ultrasonic digunakan untuk mengukur jarak atau ketinggian dengan gelombang suara."
+                    },
+                    {
+                        question: "Faktor apa yang TIDAK perlu dipertimbangkan saat memilih sensor?",
+                        options: ["Akurasi pengukuran", "Warna casing sensor", "Konsumsi daya", "Kompatibilitas dengan mikrokontroler"],
+                        correct: 1,
+                        explanation: "Warna casing sensor tidak relevan dengan performa dan fungsi sensor."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Konektivitas dalam IoT",
+                icon: "fas fa-wifi",
+                description: "Mengenal cara perangkat IoT saling terhubung.",
+                content: `
+                    <h3>Materi 3: Konektivitas dalam IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Konektivitas adalah jantung dari Internet of Things yang memungkinkan perangkat untuk saling berkomunikasi dan berbagi data. Tanpa konektivitas, sensor dan aktuator hanya akan bekerja sendiri-sendiri tanpa koordinasi. Dalam pengembangan sistem IoT untuk masjid, memilih jenis konektivitas yang tepat akan menentukan efisiensi, biaya, dan kehandalan sistem secara keseluruhan.</p>
+                    
+                    <h4>Hal Penting:</h4>
+                    <ol>
+                        <li><strong>Definisi Konektivitas IoT</strong> Konektivitas IoT adalah teknologi komunikasi yang menghubungkan perangkat IoT ke internet atau ke perangkat lain untuk bertukar data. Ini mencakup berbagai protokol seperti WiFi, Bluetooth, LoRa, Zigbee, dan seluler (4G/5G). Konektivitas memastikan data sensor dapat dikirim ke cloud dan perintah dapat diterima aktuator.</li>
+                        <li><strong>Jenis-jenis Konektivitas IoT</strong> Ada beberapa jenis konektivitas: (1) WiFi - jarak pendek, bandwidth tinggi, cocok untuk indoor, (2) Bluetooth/BLE - hemat daya, jarak pendek, untuk wearable, (3) LoRa - jarak jauh (km), hemat daya, untuk sensor outdoor, (4) Zigbee - mesh network, hemat energi, (5) Seluler (4G/5G) - coverage luas tapi mahal dan boros daya.</li>
+                        <li><strong>Protokol Komunikasi IoT</strong> Protokol penting dalam IoT: (1) MQTT - ringan, efisien untuk IoT, publish-subscribe, (2) HTTP/HTTPS - standar web, mudah tapi lebih berat, (3) CoAP - mirip HTTP tapi lebih ringan, (4) WebSocket - komunikasi real-time dua arah. Untuk masjid, MQTT cocok karena ringan dan reliable untuk monitoring real-time.</li>
+                        <li><strong>Pertimbangan Memilih Konektivitas</strong> Faktor penting: (1) Jarak jangkauan (indoor masjid: WiFi, area parkir luas: LoRa), (2) Konsumsi daya (sensor baterai: BLE/LoRa, power supply: WiFi), (3) Bandwidth (streaming video: WiFi, data sensor: LoRa cukup), (4) Biaya (WiFi murah, seluler ada biaya bulanan), (5) Keamanan data (enkripsi, autentikasi).</li>
+                        <li><strong>Keamanan Konektivitas IoT</strong> Keamanan sangat penting: (1) Gunakan enkripsi (SSL/TLS, WPA2/WPA3), (2) Autentikasi perangkat (token, sertifikat), (3) Update firmware berkala, (4) Gunakan password kuat, (5) Pisahkan jaringan IoT dari jaringan utama. Untuk masjid, lindungi data donasi dan privasi jamaah dengan enkripsi yang baik.</li>
+                    </ol>
+                    
+                    <div class="analogy-box">
+                        <h4>💡 Analogi:</h4>
+                        <p>Jika sensor dan mikrokontroler ibarat indera dan otak, maka konektivitas adalah mulut dan telinga yang memudahkan alat-alat tersebut "ngobrol".</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa yang dimaksud dengan konektivitas dalam IoT?",
+                        options: ["Kecepatan prosesor", "Teknologi komunikasi untuk menghubungkan perangkat IoT", "Ukuran memori perangkat", "Jenis sensor yang digunakan"],
+                        correct: 1,
+                        explanation: "Konektivitas adalah teknologi komunikasi yang menghubungkan perangkat IoT untuk bertukar data."
+                    },
+                    {
+                        question: "Teknologi konektivitas mana yang paling cocok untuk sistem IoT di dalam ruangan masjid?",
+                        options: ["LoRa", "Satelit", "WiFi", "Radio AM/FM"],
+                        correct: 2,
+                        explanation: "WiFi paling cocok untuk indoor karena bandwidth tinggi dan mudah diimplementasikan."
+                    },
+                    {
+                        question: "Apa kepanjangan dari MQTT?",
+                        options: ["Message Queuing Telemetry Transport", "Multiple Quality Time Transfer", "Modern Quick Transfer Technology", "Managed Queue Transmission Tool"],
+                        correct: 0,
+                        explanation: "MQTT adalah singkatan dari Message Queuing Telemetry Transport, protokol ringan untuk IoT."
+                    },
+                    {
+                        question: "Teknologi konektivitas mana yang paling hemat daya untuk sensor dengan baterai?",
+                        options: ["WiFi 2.4GHz", "Bluetooth Low Energy (BLE)", "4G LTE", "Ethernet"],
+                        correct: 1,
+                        explanation: "Bluetooth Low Energy (BLE) dirancang khusus untuk hemat daya pada perangkat baterai."
+                    },
+                    {
+                        question: "Mengapa keamanan konektivitas IoT penting untuk masjid?",
+                        options: ["Agar terlihat profesional", "Untuk melindungi data donasi dan privasi jamaah", "Supaya perangkat lebih cepat", "Agar harga lebih murah"],
+                        correct: 1,
+                        explanation: "Keamanan penting untuk melindungi data sensitif seperti donasi dan informasi jamaah."
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "Mikrokontroler dalam IoT",
+                icon: "fas fa-microchip",
+                description: "Mengenal 'otak kecil' yang menggerakkan perangkat elektronik.",
+                content: `
+                    <h3>Materi 4: Mikrokontroler dalam IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Mikrokontroler adalah "otak" dari sistem IoT yang bertugas memproses data dari sensor dan mengendalikan aktuator. Perangkat kecil ini menjalankan program yang kita buat untuk mengotomasi berbagai fungsi di masjid. Dengan memahami mikrokontroler, remaja masjid dapat membuat berbagai proyek IoT mulai dari yang sederhana seperti pengatur lampu otomatis hingga yang kompleks seperti sistem manajemen masjid terintegrasi.</p>
+                    
+                    <h4>5 Poin Penting:</h4>
+                    <ol>
+                        <li><strong>Definisi dan Fungsi Mikrokontroler</strong> Mikrokontroler adalah komputer kecil dalam satu chip yang berisi prosesor, memori, dan input/output. Fungsinya: membaca data dari sensor, memproses data sesuai program, mengambil keputusan, mengirim perintah ke aktuator, dan berkomunikasi dengan perangkat lain. Contoh: Arduino membaca sensor suhu dan memutuskan kapan harus menyalakan kipas.</li>
+                        <li><strong>Jenis-jenis Mikrokontroler untuk IoT</strong> Mikrokontroler populer: (1) Arduino (Uno, Nano, Mega) - mudah untuk pemula, banyak tutorial, (2) ESP8266 - murah, sudah ada WiFi built-in, (3) ESP32 - lebih powerful, WiFi + Bluetooth, (4) Raspberry Pi - lebih seperti komputer mini, cocok untuk proyek kompleks, (5) NodeMCU - ESP8266 dengan USB built-in, praktis.</li>
+                        <li><strong>Komponen Mikrokontroler</strong> Bagian penting mikrokontroler: (1) CPU/Prosesor - otak pemroses, (2) Memori (Flash, RAM, EEPROM) - penyimpanan program dan data, (3) GPIO - pin input/output untuk sensor dan aktuator, (4) ADC - mengubah sinyal analog ke digital, (5) Interface komunikasi (UART, SPI, I2C) - untuk komunikasi dengan perangkat lain.</li>
+                        <li><strong>Pemrograman Mikrokontroler</strong> Mikrokontroler diprogram dengan bahasa pemrograman: (1) Arduino menggunakan bahasa C/C++ dengan IDE Arduino, (2) ESP32/ESP8266 bisa pakai Arduino IDE atau MicroPython, (3) Raspberry Pi menggunakan Python. Program berisi: setup awal (pinMode, koneksi WiFi) dan loop utama (baca sensor, proses, kirim data). Ada banyak library untuk memudahkan pemrograman.</li>
+                        <li><strong>Memilih Mikrokontroler yang Tepat</strong> Pertimbangan pemilihan: (1) Kebutuhan konektivitas (perlu WiFi? pilih ESP), (2) Jumlah pin I/O (banyak sensor? pilih Mega/ESP32), (3) Konsumsi daya (baterai? pilih yang low power), (4) Harga dan ketersediaan (Arduino clone murah), (5) Tingkat kesulitan (pemula: Arduino, advanced: ESP32). Untuk proyek masjid pemula, NodeMCU ESP8266 ideal.</li>
+                    </ol>
+                    
+                    <div class="analogy-box">
+                        <h4>💡 Bahasa Sehari-Hari:</h4>
+                        <p>Mikrokontroler adalah "otak kecil" yang bekerja secara otomatis sesuai program. Ia bisa membaca sensor, memproses logika, dan menggerakkan alat.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa fungsi utama mikrokontroler dalam sistem IoT?",
+                        options: ["Menyimpan data dalam jumlah besar", "Memproses data sensor dan mengendalikan aktuator", "Menyediakan koneksi internet", "Menampilkan grafik ke layar"],
+                        correct: 1,
+                        explanation: "Mikrokontroler adalah otak sistem IoT yang memproses data dan mengendalikan perangkat lain."
+                    },
+                    {
+                        question: "Mikrokontroler mana yang paling cocok untuk pemula yang ingin belajar IoT?",
+                        options: ["Mainframe computer", "Arduino Uno", "Supercomputer", "Server rack"],
+                        correct: 1,
+                        explanation: "Arduino Uno paling cocok untuk pemula karena mudah dipelajari dan banyak tutorial."
+                    },
+                    {
+                        question: "Apa keunggulan ESP8266 dibanding Arduino Uno?",
+                        options: ["Lebih mahal", "Lebih besar ukurannya", "Sudah memiliki WiFi built-in", "Tidak bisa diprogram"],
+                        correct: 2,
+                        explanation: "ESP8266 sudah memiliki WiFi built-in, sementara Arduino Uno memerlukan modul tambahan."
+                    },
+                    {
+                        question: "Apa kepanjangan dari GPIO pada mikrokontroler?",
+                        options: ["General Purpose Input Output", "Global Power Internal Operation", "Generated Protocol Internet Option", "Graphic Processing Input Object"],
+                        correct: 0,
+                        explanation: "GPIO adalah General Purpose Input Output, pin serbaguna untuk input dan output."
+                    },
+                    {
+                        question: "Bahasa pemrograman apa yang digunakan Arduino?",
+                        options: ["HTML", "Java", "C/C++", "PHP"],
+                        correct: 2,
+                        explanation: "Arduino menggunakan bahasa C/C++ dengan IDE Arduino."
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "Aktuator dalam IoT",
+                icon: "fas fa-cogs",
+                description: "Mengenal 'tangan & kaki' yang menjalankan perintah dalam sistem IoT.",
+                content: `
+                    <h3>Materi 5: Aktuator dalam IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Aktuator adalah komponen yang mengubah sinyal listrik menjadi aksi fisik, merupakan "tangan dan kaki" dari sistem IoT. Jika sensor adalah input, maka aktuator adalah output yang menghasilkan perubahan nyata di lingkungan. Dalam konteks masjid, aktuator memungkinkan otomasi seperti membuka pintu otomatis, menyalakan lampu, mengatur suhu AC, atau menggerakkan kamera CCTV untuk memberikan pelayanan yang lebih baik kepada jamaah.</p>
+                    
+                    <h4>Hal Penting:</h4>
+                    <ol>
+                        <li><strong>Definisi dan Fungsi Aktuator</strong> Aktuator adalah perangkat yang mengubah energi listrik menjadi gerakan fisik atau perubahan kondisi. Fungsinya: menerima perintah dari mikrokontroler, melakukan aksi fisik (gerakan, cahaya, suara, panas), mengubah kondisi lingkungan sesuai kebutuhan, memberikan feedback kepada sistem, dan mewujudkan otomasi. Contoh: relay menyalakan lampu masjid saat sensor gerak mendeteksi jamaah.</li>
+                        <li><strong>Jenis-jenis Aktuator</strong> Berbagai tipe aktuator: (1) Relay - saklar elektronik untuk perangkat AC (lampu, kipas, pompa), (2) Motor servo - gerakan rotasi presisi (0-180°) untuk pintu, kamera, (3) Motor DC - gerakan rotasi kontinyu (kipas, pompa), (4) Motor stepper - gerakan presisi tinggi (printer, robot), (5) Solenoid - gerakan linear (kunci pintu, valve), (6) LED - output cahaya, (7) Speaker/Buzzer - output suara.</li>
+                        <li><strong>Cara Kerja Aktuator</strong> Prinsip kerja aktuator: (1) Mikrokontroler mengirim sinyal digital/PWM, (2) Driver/relay memperkuat sinyal jika perlu, (3) Aktuator menerima daya dan sinyal kontrol, (4) Aktuator melakukan aksi fisik sesuai perintah, (5) Beberapa aktuator punya feedback sensor untuk memastikan aksi selesai. Contoh: servo menerima sinyal PWM → motor berputar ke sudut tertentu → berhenti saat mencapai posisi.</li>
+                        <li><strong>Integrasi Aktuator dengan Sistem IoT</strong> Integrasi melibatkan: (1) Koneksi hardware (pin GPIO, driver relay/motor), (2) Pemrograman kontrol (library servo, PWM control), (3) Logika keputusan (if sensor > threshold, nyalakan aktuator), (4) Timing dan sequencing (kapan dan berapa lama aktuator aktif), (5) Safety mechanism (timeout, limit switch). Untuk masjid: jika sensor deteksi jamaah AND cahaya kurang, maka nyalakan lampu.</li>
+                        <li><strong>Tips Menggunakan Aktuator dengan Aman</strong> Pertimbangan keamanan: (1) Gunakan relay untuk perangkat listrik AC (220V), jangan langsung dari mikrokontroler, (2) Perhatikan rating arus dan tegangan, (3) Pasang diode flyback untuk motor (cegah back EMF), (4) Gunakan power supply terpisah untuk aktuator berdaya besar, (5) Implementasi timeout dan emergency stop, (6) Isolasi jalur daya tinggi dari mikrokontroler. Safety first untuk instalasi di masjid!</li>
+                    </ol>
+                    
+                    <div class="analogy-box">
+                        <h4>💡 Analogi:</h4>
+                        <p>Jika sensor adalah indera, dan mikrokontroler adalah otaknya, maka aktuator adalah tangan/kaki yang menjalankan perintah.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa fungsi utama aktuator dalam sistem IoT?",
+                        options: ["Mendeteksi perubahan lingkungan", "Mengubah sinyal listrik menjadi aksi fisik", "Memproses data", "Menyimpan informasi"],
+                        correct: 1,
+                        explanation: "Aktuator mengubah sinyal listrik menjadi aksi fisik seperti gerakan, cahaya, atau suara."
+                    },
+                    {
+                        question: "Aktuator mana yang cocok untuk menyalakan lampu masjid 220V?",
+                        options: ["LED kecil 5V", "Sensor PIR", "Relay", "Resistor"],
+                        correct: 2,
+                        explanation: "Relay cocok untuk menyalakan perangkat AC 220V karena memberikan isolasi listrik yang aman."
+                    },
+                    {
+                        question: "Motor servo biasanya digunakan untuk gerakan yang membutuhkan?",
+                        options: ["Kecepatan tinggi tanpa kontrol", "Rotasi presisi dengan sudut tertentu", "Gerakan acak", "Hanya diam di tempat"],
+                        correct: 1,
+                        explanation: "Motor servo digunakan untuk gerakan presisi dengan kontrol sudut tertentu (0-180°)."
+                    },
+                    {
+                        question: "Mengapa kita perlu relay untuk menghubungkan mikrokontroler dengan perangkat AC 220V?",
+                        options: ["Supaya lebih murah", "Untuk keamanan, karena mikrokontroler hanya 5V/3.3V", "Agar lebih cepat", "Relay tidak diperlukan"],
+                        correct: 1,
+                        explanation: "Relay diperlukan untuk keamanan karena mikrokontroler hanya bekerja pada tegangan rendah (5V/3.3V)."
+                    },
+                    {
+                        question: "Apa yang dimaksud dengan PWM dalam kontrol aktuator?",
+                        options: ["Power Wiring Method", "Pulse Width Modulation", "Permanent Wave Motion", "Protected Wire Management"],
+                        correct: 1,
+                        explanation: "PWM (Pulse Width Modulation) adalah teknik untuk mengontrol daya dengan memodulasi lebar pulsa."
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: "Platform Cloud IoT",
+                icon: "fas fa-cloud",
+                description: "Tempat data terkumpul dan diolah dalam sistem IoT.",
+                content: `
+                    <h3>Materi 6: Platform Cloud IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Platform Cloud IoT adalah layanan berbasis internet yang menyimpan, memproses, dan menampilkan data dari perangkat IoT. Cloud memungkinkan kita mengakses dan mengontrol sistem IoT masjid dari mana saja melalui smartphone atau komputer. Dengan cloud, data sensor dapat disimpan dalam jangka panjang, dianalisis untuk mendapatkan insight, dan ditampilkan dalam dashboard yang informatif untuk membantu pengurus masjid mengambil keputusan yang lebih baik.</p>
+                    
+                    <h4>Hal Penting:</h4>
+                    <ol>
+                        <li><strong>Definisi Platform Cloud IoT</strong> Platform Cloud IoT adalah layanan online yang menyediakan infrastruktur untuk menyimpan data IoT, memproses data real-time, visualisasi dashboard, kontrol jarak jauh perangkat, dan analytics. Platform populer: ThingSpeak, Blynk, Arduino IoT Cloud, Google Cloud IoT, AWS IoT. Untuk masjid: monitoring konsumsi listrik, tracking donasi digital, statistik kehadiran jamaah---semuanya tersimpan aman di cloud.</li>
+                        <li><strong>Fitur-fitur Platform Cloud IoT</strong> Fitur utama: (1) Data storage - menyimpan ribuan data sensor, (2) Real-time monitoring - lihat status perangkat langsung, (3) Dashboard & visualization - grafik, gauge, chart otomatis, (4) Remote control - nyalakan/matikan perangkat dari HP, (5) Alert & notification - notifikasi jika ada anomali, (6) API - integrasi dengan aplikasi lain, (7) Data analytics - analisis trend dan pola.</li>
+                        <li><strong>Cara Kerja Komunikasi dengan Cloud</strong> Alur kerja: (1) Sensor di masjid baca data, (2) Mikrokontroler kirim data via WiFi/seluler ke cloud menggunakan protokol MQTT/HTTP, (3) Cloud server terima dan simpan data di database, (4) Cloud proses data (rata-rata, trend, anomaly detection), (5) User akses dashboard via web/app, (6) User kirim perintah ke cloud, (7) Cloud forward perintah ke perangkat IoT.</li>
+                        <li><strong>Memilih Platform Cloud yang Tepat</strong> Pertimbangan: (1) Gratis vs berbayar (ThingSpeak free: 3 juta messages/tahun, Blynk free: 1 device), (2) Kemudahan penggunaan (Blynk paling user-friendly untuk pemula), (3) Fitur yang dibutuhkan (analytics kompleks: AWS/Google), (4) Jumlah perangkat dan data (scale), (5) Keamanan dan privasi data. Untuk pemula masjid: ThingSpeak atau Blynk cocok karena gratis dan mudah.</li>
+                        <li><strong>Keamanan dan Privasi Data Cloud</strong> Aspek keamanan: (1) Enkripsi data (SSL/TLS saat transmisi), (2) Autentikasi API key/token untuk cegah akses ilegal, (3) Backup data berkala, (4) Akses kontrol (role-based: siapa boleh lihat/edit), (5) Compliance (GDPR, privasi data jamaah), (6) Pilih server location (lebih baik di Indonesia). Jaga keamanan data donasi dan informasi jamaah sebagai amanah.</li>
+                    </ol>
+                    
+                    <div class="analogy-box">
+                        <h4>💡 Analogi sederhana:</h4>
+                        <p>Cloud = laci penyimpanan di internet. Sensor → kirim data → disimpan di cloud → HP membaca data dari sana.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa fungsi utama Platform Cloud IoT?",
+                        options: ["Membuat hardware IoT", "Menyimpan, memproses, dan menampilkan data IoT", "Mengganti mikrokontroler", "Memproduksi sensor"],
+                        correct: 1,
+                        explanation: "Platform Cloud IoT berfungsi menyimpan, memproses, dan menampilkan data dari perangkat IoT."
+                    },
+                    {
+                        question: "Platform Cloud IoT mana yang paling cocok untuk pemula?",
+                        options: ["Custom server sendiri", "ThingSpeak atau Blynk", "Mainframe server", "Satelit communication"],
+                        correct: 1,
+                        explanation: "ThingSpeak dan Blynk cocok untuk pemula karena gratis dan mudah digunakan."
+                    },
+                    {
+                        question: "Protokol apa yang umum digunakan untuk mengirim data ke cloud IoT?",
+                        options: ["FTP", "SMTP", "MQTT", "POP3"],
+                        correct: 2,
+                        explanation: "MQTT adalah protokol ringan yang umum digunakan untuk mengirim data ke cloud IoT."
+                    },
+                    {
+                        question: "Apa keuntungan menggunakan cloud untuk sistem IoT masjid?",
+                        options: ["Data tidak bisa diakses dari jauh", "Lebih mahal dan rumit", "Bisa monitoring dan kontrol dari mana saja", "Harus selalu di lokasi"],
+                        correct: 2,
+                        explanation: "Cloud memungkinkan monitoring dan kontrol sistem IoT dari mana saja melalui internet."
+                    },
+                    {
+                        question: "Apa yang dimaksud dengan API key dalam platform cloud?",
+                        options: ["Kunci fisik untuk membuka server", "Token autentikasi untuk keamanan akses", "Nama pengguna", "Alamat email"],
+                        correct: 1,
+                        explanation: "API key adalah token autentikasi untuk mengamankan akses ke platform cloud."
+                    }
+                ]
+            },
+            {
+                id: 7,
+                title: "Dashboard & UI/UX dalam IoT",
+                icon: "fas fa-tachometer-alt",
+                description: "Tempat data ditampilkan agar mudah dipantau.",
+                content: `
+                    <h3>Materi 7: Dashboard & UI/UX dalam IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Dashboard dan User Interface (UI) adalah "wajah" dari sistem IoT yang berinteraksi langsung dengan pengguna. Secanggih apapun sistem IoT yang dibuat, jika tampilan dashboard membingungkan atau sulit digunakan, maka sistem tersebut tidak akan efektif. Untuk sistem IoT masjid, dashboard yang baik akan memudahkan pengurus dalam monitoring dan pengambilan keputusan, serta memudahkan jamaah dalam mengakses informasi. User Experience (UX) yang baik akan membuat teknologi terasa natural dan tidak merepotkan.</p>
+                    
+                    <h4>5 Poin Penting:</h4>
+                    <ol>
+                        <li><strong>Pengertian Dashboard, UI, dan UX dalam IoT</strong> Dashboard adalah tampilan visual yang mengkonsolidasikan data dari berbagai sensor IoT dalam satu layar yang mudah dipahami. UI (User Interface) adalah elemen visual yang dilihat dan diinteraksi pengguna: tombol, grafik, warna, layout. UX (User Experience) adalah keseluruhan pengalaman pengguna saat berinteraksi dengan sistem: seberapa mudah, intuitif, dan menyenangkan. Contoh: dashboard masjid menampilkan suhu ruangan, jumlah jamaah, status AC, donasi hari ini---semua dalam satu layar yang clear. UI yang baik: tombol besar dan jelas. UX yang baik: pengurus bisa akses info penting dalam 3 detik tanpa bingung.</li>
+                        <li><strong>Jenis-jenis Display untuk IoT</strong> Display hardware yang umum: (1) <strong>LCD Character (16x2, 20x4)</strong> - murah, hanya teks, cocok untuk info sederhana seperti suhu/waktu sholat. (2) <strong>OLED Display (0.96", 1.3")</strong> - kontras tinggi, hemat daya, bagus untuk outdoor, tampilan lebih modern. (3) <strong>TFT LCD Touch Screen (2.4"-7")</strong> - berwarna, bisa touch, cocok untuk kontrol panel interaktif. (4) <strong>LED Matrix/7-Segment</strong> - untuk angka besar, bisa dilihat dari jauh, cocok untuk countdown sholat atau antrian (5) <strong>Web Dashboard</strong> - akses via browser dari HP/laptop, tidak perlu hardware display fisik, gratis tapi perlu internet. Pilih sesuai kebutuhan dan budget.</li>
+                        <li><strong>Prinsip Desain Dashboard yang Efektif</strong> Prinsip penting: (1) <strong>Hierarchy</strong> - info paling penting di posisi paling menonjol (ukuran besar, warna kontras), misalnya waktu sholat berikutnya lebih besar dari info lain (2) <strong>Simplicity</strong> - jangan terlalu banyak info dalam satu layar, maksimal 5-7 widget, gunakan whitespace, (3) <strong>Consistency</strong> - warna, font, icon style konsisten di semua halaman (4) <strong>Real-time feedback</strong> - indikator loading, konfirmasi aksi berhasil/gagal (5) <strong>Accessibility</strong> - font cukup besar untuk lansia (min 16px), warna kontras untuk low vision (6) <strong>Responsive</strong> - tampilan menyesuaikan dengan device (HP, tablet, desktop). Dashboard masjid harus bisa diakses pengurus yang mungkin kurang tech-savvy.</li>
+                        <li><strong>Elemen Visualisasi Data IoT</strong> Komponen dashboard: (1) <strong>Gauge/Meter</strong> - untuk nilai tunggal dengan range (suhu 20-35°C), mudah dibaca sekilas (2) <strong>Line Chart</strong> - untuk trend over time (konsumsi listrik per jam), lihat pola naik-turun (3) <strong>Bar Chart</strong> - untuk perbandingan (jumlah jamaah per waktu sholat) (4) <strong>Number Display</strong> - angka besar untuk KPI utama (total donasi hari ini) (5) <strong>Status Indicator</strong> - LED virtual hijau/merah (AC hidup/mati, air cukup/kurang) (6) <strong>Map</strong> - untuk lokasi (distribusi jamaah berdasarkan area) (7) <strong>Table</strong> - untuk data detail terstruktur. Gunakan visualisasi yang sesuai dengan jenis data. Hindari pie chart untuk data time-series. Warna coding: hijau=normal, kuning=warning, merah=critical.</li>
+                        <li><strong>Platform dan Tools untuk Membuat Dashboard IoT</strong> Tools populer: (1) <strong>Blynk</strong> - paling user-friendly, drag-drop widget, app mobile siap pakai, gratis untuk 1 device, cocok pemula, tampilan modern (2) <strong>ThingSpeak</strong> - dari MathWorks, gratis 3 juta messages/tahun, visualisasi otomatis, bisa custom HTML, cocok untuk data analytics (3) <strong>Node-RED Dashboard</strong> - open source, fleksibel, butuh Raspberry Pi/server sendiri, bisa custom penuh (4) <strong>Grafana</strong> - professional grade, visualisasi powerful, tapi lebih kompleks (5) <strong>Custom Web Dashboard</strong> - pakai HTML/CSS/JavaScript + API, kontrol penuh tapi butuh coding skill. Untuk masjid pemula: mulai dari Blynk atau ThingSpeak. Kalau sudah advanced: Node-RED atau custom web. Yang penting: dashboard harus stabil, tidak error, dan loading cepat.</li>
+                    </ol>
+                `,
+                quiz: [
+                    {
+                        question: "Apa perbedaan antara UI dan UX?",
+                        options: ["UI dan UX adalah hal yang sama", "UI adalah elemen visual, UX adalah keseluruhan pengalaman pengguna", "UI untuk hardware, UX untuk software", "Tidak ada perbedaan"],
+                        correct: 1,
+                        explanation: "UI adalah elemen visual yang dilihat pengguna, sedangkan UX adalah keseluruhan pengalaman saat menggunakan sistem."
+                    },
+                    {
+                        question: "Display jenis apa yang paling cocok untuk menampilkan countdown waktu sholat yang bisa dilihat dari jauh?",
+                        options: ["LCD Character 16x2", "OLED 0.96 inch", "LED Matrix atau 7-Segment besar", "Layar HP"],
+                        correct: 2,
+                        explanation: "LED Matrix atau 7-Segment besar cocok untuk tampilan jarak jauh karena ukurannya besar dan terang."
+                    },
+                    {
+                        question: "Berapa maksimal jumlah widget yang sebaiknya ditampilkan dalam satu layar dashboard?",
+                        options: ["1-2 widget", "5-7 widget", "20-30 widget", "Tidak ada batasan"],
+                        correct: 1,
+                        explanation: "5-7 widget adalah jumlah optimal agar dashboard tidak terlalu padat dan mudah dibaca."
+                    },
+                    {
+                        question: "Visualisasi apa yang paling tepat untuk menampilkan trend konsumsi listrik per jam?",
+                        options: ["Pie chart", "Line chart", "Tabel angka saja", "Text biasa"],
+                        correct: 1,
+                        explanation: "Line chart paling tepat untuk menampilkan trend data over time seperti konsumsi listrik per jam."
+                    },
+                    {
+                        question: "Platform dashboard IoT mana yang paling cocok untuk pemula?",
+                        options: ["Custom coding dari awal", "Blynk (drag-drop, user-friendly)", "Assembly language", "Tidak perlu dashboard"],
+                        correct: 1,
+                        explanation: "Blynk paling cocok untuk pemula karena menggunakan drag-drop widget tanpa perlu coding kompleks."
+                    }
+                ]
+            },
+            {
+                id: 8,
+                title: "Keamanan dan Etika IoT",
+                icon: "fas fa-shield-alt",
+                description: "Memahami pentingnya keamanan dan etika dalam pengembangan sistem IoT.",
+                content: `
+                    <h3>Materi 8: Keamanan dan Etika IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Keamanan dan etika dalam IoT sangat penting, terutama untuk sistem yang digunakan di masjid yang melayani banyak jamaah. Sistem IoT yang tidak aman dapat diretas, data pribadi jamaah dapat bocor, atau sistem dapat disalahgunakan. Sebagai muslim yang mengembangkan teknologi untuk masjid, kita punya tanggung jawab moral dan agama untuk menjaga amanah, melindungi privasi, dan memastikan teknologi digunakan untuk kebaikan.</p>
+                    
+                    <h4>5 Poin Penting:</h4>
+                    <ol>
+                        <li><strong>Ancaman Keamanan dalam IoT</strong> Risiko yang perlu diwaspadai: (1) Hacking - perangkat diambil alih pihak tidak bertanggung jawab, (2) Data breach - bocornya data donasi atau informasi jamaah, (3) DDoS attack - sistem dibanjiri request hingga down, (4) Man-in-the-middle - data disadap saat transmisi, (5) Malware - virus menginfeksi perangkat, (6) Physical tampering - orang jahil rusak hardware. Untuk masjid: lindungi sistem donasi digital, CCTV, dan data jamaah.</li>
+                        <li><strong>Prinsip Keamanan IoT (CIA Triad)</strong> Tiga pilar keamanan: (1) Confidentiality (Kerahasiaan) - hanya yang berwenang bisa akses data, gunakan enkripsi dan password kuat, (2) Integrity (Integritas) - data tidak boleh diubah tanpa izin, gunakan checksums dan digital signatures, (3) Availability (Ketersediaan) - sistem harus selalu bisa diakses saat dibutuhkan, gunakan backup dan redundancy. Jaga ketiga aspek ini dalam sistem IoT masjid.</li>
+                        <li><strong>Best Practices Keamanan IoT</strong> Praktik terbaik: (1) Ganti password default (jangan pakai "admin/admin"), (2) Update firmware berkala untuk patch keamanan, (3) Gunakan enkripsi (WPA3 untuk WiFi, SSL/TLS untuk data), (4) Network segmentation (pisahkan jaringan IoT dari jaringan utama), (5) Disable fitur yang tidak digunakan, (6) Monitoring log aktivitas, (7) Backup data teratur, (8) Physical security (kunci ruang server, anti theft untuk device outdoor).</li>
+                        <li><strong>Etika Penggunaan IoT di Masjid</strong> Pertimbangan etika: (1) Privasi jamaah - CCTV tidak boleh di area sensitif (toilet, tempat wudhu), inform jamaah jika ada recording, (2) Transparansi - jelaskan data apa yang dikumpulkan dan untuk apa, (3) Consent - minta izin untuk data personal, (4) Minimalisasi data - hanya kumpulkan data yang benar-benar diperlukan, (5) Hak akses - batasi siapa yang bisa lihat data sensitif, (6) Jangan diskriminasi - sistem harus adil untuk semua jamaah. Amanah adalah prinsip utama!</li>
+                        <li><strong>Aspek Syariah dalam IoT Masjid</strong> Pertimbangan syariah: (1) Niat - teknologi untuk kemudahan ibadah dan kemaslahatan umat, bukan pamer, (2) Tidak berlebihan (israf) - pilih solusi yang proporsional dengan kebutuhan, (3) Menjaga aurat - posisi kamera harus proper, (4) Transparansi keuangan - sistem donasi digital harus jelas dan accountable, (5) Manfaat lebih besar dari mudarat - evaluasi dampak positif vs risiko, (6) Tidak menyibukkan dari dzikir - notifikasi jangan mengganggu ibadah. Berkonsultasilah dengan ustadz/pengurus masjid.</li>
+                    </ol>
+                `,
+                quiz: [
+                    {
+                        question: "Apa kepanjangan dari CIA Triad dalam keamanan IoT?",
+                        options: ["Computer Internet Algorithm", "Confidentiality, Integrity, Availability", "Cloud Integration Access", "Central Intelligence Agency"],
+                        correct: 1,
+                        explanation: "CIA Triad adalah Confidentiality (Kerahasiaan), Integrity (Integritas), dan Availability (Ketersediaan)."
+                    },
+                    {
+                        question: "Mengapa password default harus segera diganti?",
+                        options: ["Supaya terlihat profesional", "Karena password default mudah ditebak dan sering jadi target hacker", "Agar lebih cepat", "Tidak perlu diganti"],
+                        correct: 1,
+                        explanation: "Password default mudah ditebak hacker dan harus diganti untuk keamanan sistem."
+                    },
+                    {
+                        question: "Di mana sebaiknya CCTV TIDAK dipasang di masjid karena alasan etika?",
+                        options: ["Area parkir", "Pintu masuk", "Toilet dan tempat wudhu", "Ruang utama"],
+                        correct: 2,
+                        explanation: "CCTV tidak boleh dipasang di toilet dan tempat wudhu untuk menjaga privasi jamaah."
+                    },
+                    {
+                        question: "Apa prinsip Islam yang paling relevan dengan keamanan data jamaah?",
+                        options: ["Amanah (menjaga kepercayaan)", "Riya (pamer)", "Takabur (sombong)", "Hasad (dengki)"],
+                        correct: 0,
+                        explanation: "Amanah (menjaga kepercayaan) adalah prinsip Islam yang paling relevan dengan keamanan data."
+                    },
+                    {
+                        question: "Apa yang dimaksud dengan network segmentation?",
+                        options: ["Menghapus semua jaringan", "Memisahkan jaringan IoT dari jaringan utama untuk keamanan", "Menggabungkan semua perangkat dalam satu jaringan", "Mematikan WiFi"],
+                        correct: 1,
+                        explanation: "Network segmentation adalah memisahkan jaringan IoT dari jaringan utama untuk meningkatkan keamanan."
+                    }
+                ]
+            },
+            {
+                id: 9,
+                title: "Troubleshooting dan Maintenance IoT",
+                icon: "fas fa-tools",
+                description: "Mengatasi masalah dan merawat sistem IoT agar tetap optimal.",
+                content: `
+                    <h3>Materi 9: Troubleshooting dan Maintenance IoT</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Sistem IoT, seperti perangkat elektronik lainnya, memerlukan perawatan dan kadang mengalami masalah. Kemampuan troubleshooting (mencari dan memperbaiki masalah) dan maintenance (perawatan berkala) sangat penting agar sistem IoT di masjid tetap berjalan optimal. Dengan pemahaman yang baik tentang troubleshooting, remaja masjid dapat menjadi "teknisi IoT" yang mandiri dan tidak bergantung sepenuhnya pada pihak luar saat ada masalah.</p>
+                    
+                    <h4>Hal Penting:</h4>
+                    <ol>
+                        <li><strong>Masalah Umum dan Solusinya</strong> Masalah frequent: (1) Perangkat tidak connect WiFi - cek password, jarak router, signal strength; restart device (2) Sensor membaca data aneh - kalibrasi ulang, cek wiring, ganti sensor rusak (3) Data tidak masuk ke cloud - cek koneksi internet, API key, kuota data (4) Aktuator tidak respon - cek power supply, koneksi relay, program logic (5) Device restart sendiri - cek power supply insufficient, kode infinite loop, overheating. Buat log error untuk tracking pattern masalah.</li>
+                        <li><strong>Metode Systematic Troubleshooting</strong> Pendekatan terstruktur: (1) Identifikasi gejala - apa yang tidak normal? sejak kapan? (2) Isolasi masalah - hardware atau software? sensor atau mikrokontroler?, (3) Divide and conquer - test komponen satu-per-satu (4) Check the basics first - power, koneksi, kabel (5) Gunakan tools - multimeter untuk cek tegangan, serial monitor untuk debug code (6) Dokumentasi - catat masalah dan solusi untuk referensi masa depan. Metode sistematis menghemat waktu dibanding trial-error.</li>
+                        <li><strong>Tools dan Teknik Debugging</strong> Tools penting: (1) Serial Monitor - lihat output program real-time, print variable untuk debug, (2) Multimeter - ukur tegangan, arus, kontinuitas kabel, (3) LED indikator - tunjukkan status program (blink pattern untuk error codes), (4) Breadboard - test cepat tanpa solder, (5) Logic analyzer - untuk masalah komunikasi kompleks (I2C, SPI). Teknik: gunakan banyak Serial.println() untuk track flow program, comment code bertahap untuk isolasi bug, test dengan minimal setup dulu.</li>
+                        <li><strong>Jadwal Maintenance Berkala</strong> Maintenance preventif: (1) Harian - cek dashboard untuk anomali data (2) Mingguan - bersihkan debu dari sensor (khususnya outdoor), cek LED indikator (3) Bulanan - test backup power, update firmware jika ada, cek koneksi fisik (kabel longgar?), review log error (4) 3 Bulanan - kalibrasi sensor, cek kondisi enclosure (korosi?), backup data cloud (5) Tahunan - ganti komponen consumable (baterai, relay sering switching), full system audit. Preventive maintenance lebih murah dari perbaikan darurat!</li>
+                        <li><strong>Dokumentasi dan Knowledge Management</strong> Pentingnya dokumentasi: (1) Schematic diagram - gambar wiring lengkap dengan label (2) Code comments - jelaskan logika program (3) Setup guide - langkah instalasi untuk regenerasi (4) Troubleshooting guide - list masalah dan solusinya (5) Contact list - vendor, komunitas untuk help (6) Change log - catat setiap modifikasi sistem. Simpan di Google Drive untuk akses mudah oleh tim. Dokumentasi baik = transfer knowledge lancar ke pengurus baru.</li>
+                    </ol>
+                `,
+                quiz: [
+                    {
+                        question: "Apa langkah pertama dalam systematic troubleshooting?",
+                        options: ["Langsung ganti semua komponen", "Identifikasi gejala dan kapan masalah mulai terjadi", "Beli perangkat baru", "Abaikan masalah"],
+                        correct: 1,
+                        explanation: "Langkah pertama adalah mengidentifikasi gejala dan kapan masalah mulai terjadi."
+                    },
+                    {
+                        question: "Tools apa yang digunakan untuk melihat output program secara real-time?",
+                        options: ["Palu", "Serial Monitor", "Gunting", "Kamera"],
+                        correct: 1,
+                        explanation: "Serial Monitor digunakan untuk melihat output program mikrokontroler secara real-time."
+                    },
+                    {
+                        question: "Seberapa sering maintenance harian sebaiknya dilakukan?",
+                        options: ["Setiap hari - cek dashboard untuk anomali", "Setiap tahun", "Tidak perlu maintenance", "Setiap 10 tahun"],
+                        correct: 0,
+                        explanation: "Maintenance harian meliputi pengecekan dashboard untuk mendeteksi anomali data."
+                    },
+                    {
+                        question: "Apa yang harus dilakukan jika perangkat IoT tidak bisa connect ke WiFi?",
+                        options: ["Buang perangkatnya", "Cek password, jarak router, signal strength, dan restart device", "Tidak perlu diapa-apakan", "Tunggu sampai connect sendiri"],
+                        correct: 1,
+                        explanation: "Cek password, jarak router, signal strength, dan restart device adalah langkah troubleshooting pertama."
+                    },
+                    {
+                        question: "Mengapa dokumentasi sistem IoT penting?",
+                        options: ["Hanya untuk formalitas", "Untuk transfer knowledge ke pengurus baru dan troubleshooting lebih mudah", "Membuang-buang waktu", "Tidak penting sama sekali"],
+                        correct: 1,
+                        explanation: "Dokumentasi penting untuk transfer knowledge dan memudahkan troubleshooting di masa depan."
+                    }
+                ]
+            },
+            {
+                id: 10,
+                title: "Masa Depan IoT dan Pengembangan Karir",
+                icon: "fas fa-rocket",
+                description: "Peluang dan pengembangan karir di bidang IoT masa depan.",
+                content: `
+                    <h3>Materi 10: Masa Depan IoT dan Pengembangan Karir</h3>
+                    <p><strong>Pengantar</strong></p>
+                    <p>Internet of Things adalah teknologi yang terus berkembang pesat dan akan semakin penting di masa depan. Bagi remaja masjid yang tertarik dengan IoT, ada banyak peluang untuk mengembangkan skill, berkarir, atau bahkan membuka usaha di bidang ini. Lebih dari itu, dengan menguasai IoT, kalian bisa berkontribusi untuk modernisasi masjid-masjid di Indonesia, membuatnya lebih efisien dan ramah lingkungan, sekaligus tetap menjaga nilai-nilai spiritual.</p>
+                    
+                    <h4>Hal Penting:</h4>
+                    <ol>
+                        <li><strong>Tren Teknologi IoT Masa Depan</strong> Perkembangan yang akan datang: (1) AI + IoT (AIoT) - device yang bisa belajar dan prediksi otomatis, contoh: sistem AC yang belajar pola jamaah dan auto-adjust (2) 5G - koneksi lebih cepat untuk video real-time (3) Edge Computing - processing di device langsung, kurangi latency (4) Green IoT - fokus efisiensi energi dan sustainability (5) Digital Twin - simulasi virtual dari sistem fisik masjid (6) Blockchain - untuk transparansi donasi digital. Masjid pintar masa depan akan fully automated namun tetap humanistic.</li>
+                        <li><strong>IoT untuk Smart Mosque Ecosystem</strong> Visi masjid pintar: (1) Smart energy - panel solar + IoT monitoring konsumsi real-time (2) Smart parking - sensor parkir available + guidance system (3) Crowd management - prediksi kepadatan jamaah berbasis AI (4) Smart donation - QR code, e-wallet integration, transparent reporting (5) Virtual tour - jamaah bisa ikut kajian online dengan kualitas tinggi (6) Integrated app - satu app untuk semua layanan masjid (jadwal, donasi, booking, kajian). Indonesia punya 800,000+ masjid - peluang besar untuk inovasi!</li>
+                        <li><strong>Jalur Karir di Bidang IoT</strong> Profesi yang bisa digeluti: (1) IoT Developer - gaji junior Rp 6-10 juta/bulan (2) IoT Solutions Architect - design sistem end-to-end (3) Data Analyst - analisis data IoT untuk business insight (4) Embedded Systems Engineer - fokus hardware dan firmware (5) IoT Security Specialist - amankan sistem IoT (6) IoT Consultant - bantu perusahaan/organisasi implementasi IoT (7) IoT Entrepreneur - buat startup IoT sendiri. Demand tinggi tapi talenta masih kurang - peluang besar!</li>
+                        <li><strong>Roadmap Belajar IoT</strong> Tahapan pembelajaran: (1) Foundation (3-6 bulan) - elektronika dasar, pemrograman C/Python, Arduino basics (2) Intermediate (6-12 bulan) - networking, database, cloud platform, sensor advanced (3) Advanced (12+ bulan) - machine learning, computer vision, sistem kompleks, security, (4) Specialization - pilih fokus: smart home, industrial IoT, agriculture, atau smart city. Belajar sambil praktek project nyata. Ikuti online course (Coursera, Udemy), baca dokumentasi, join komunitas (Arduino Indonesia, IoT Makers).</li>
+                        <li><strong>Kontribusi untuk Umat</strong> Cara berkontribusi: (1) Volunteer - bantu masjid sekitar implementasi IoT gratis sebagai ibadah, (2) Open source - share code dan tutorial di GitHub untuk ummat lain, (3) Mentoring - ajari adik-adik remaja masjid lain, buat workshop rutin, (4) Research - kembangkan solusi IoT yang terjangkau untuk masjid kecil, (5) Advocacy - sosialisasi manfaat teknologi ke pengurus masjid yang masih tradisional, (6) Social enterprise - buat usaha IoT dengan model bisnis yang sustainable namun affordable untuk masjid. Jadikan skill IoT sebagai bentuk sedekah jariyah!</li>
+                    </ol>
+                    
+                    <div class="analogy-box">
+                        <h4>📋 Penutup dan Motivasi</h4>
+                        <p>Alhamdulillah, kita telah menyelesaikan 10 materi pembelajaran IoT untuk remaja masjid. Perjalanan belajar IoT memang membutuhkan kesabaran dan ketekunan, tapi ingatlah bahwa setiap skill yang kalian kuasai bisa menjadi amal jariyah jika digunakan untuk kebaikan umat.</p>
+                    </div>
+                `,
+                quiz: [
+                    {
+                        question: "Apa yang dimaksud dengan AIoT?",
+                        options: ["Artificial Internet of Things", "AI + IoT (Artificial Intelligence + Internet of Things)", "Automatic Internet Only Technology", "Advanced Input Output Terminal"],
+                        correct: 1,
+                        explanation: "AIoT adalah kombinasi Artificial Intelligence (AI) dengan Internet of Things (IoT)."
+                    },
+                    {
+                        question: "Berapa perkiraan jumlah masjid di Indonesia?",
+                        options: ["1,000 masjid", "10,000 masjid", "100,000 masjid", "800,000+ masjid"],
+                        correct: 3,
+                        explanation: "Indonesia memiliki lebih dari 800,000 masjid, peluang besar untuk implementasi IoT."
+                    },
+                    {
+                        question: "Berapa kisaran gaji junior IoT Developer di Indonesia?",
+                        options: ["Rp 1-2 juta/bulan", "Rp 6-10 juta/bulan", "Rp 100 ribu/bulan", "Rp 50 juta/bulan"],
+                        correct: 1,
+                        explanation: "Junior IoT Developer di Indonesia berkisar Rp 6-10 juta per bulan."
+                    },
+                    {
+                        question: "Berapa lama waktu yang dibutuhkan untuk menguasai foundation level IoT?",
+                        options: ["1 minggu", "3-6 bulan", "10 tahun", "1 hari"],
+                        correct: 1,
+                        explanation: "Foundation level IoT membutuhkan waktu sekitar 3-6 bulan untuk dikuasai."
+                    },
+                    {
+                        question: "Apa bentuk kontribusi terbaik bagi remaja masjid yang menguasai IoT?",
+                        options: ["Menyimpan ilmu untuk diri sendiri", "Volunteer implementasi IoT di masjid dan mentoring sebagai sedekah jariyah", "Hanya fokus mencari keuntungan", "Tidak perlu berbagi ilmu"],
+                        correct: 1,
+                        explanation: "Kontribusi terbaik adalah volunteer di masjid dan mentoring sebagai bentuk sedekah jariyah."
+                    }
+                ]
+            }
+        ];
+
+        // ============================================
+        // MODUL TAMBAHAN: PEMAHAMAN DASAR ELEKTRONIKA
+        // ============================================
+        const elektronikaModule = {
+            id: 11,
+            title: "Pemahaman Dasar Elektronika",
+            icon: "fas fa-bolt",
+            description: "Mengenal komponen elektronika dasar untuk IoT.",
+            content: `
+                <h3>Materi Pendukung: Pemahaman Elektronika Dasar</h3>
+                
+                <p><strong>Pengantar</strong></p>
+                <p>Hubungan antara elektronika dan Internet of Things (IoT) bersifat esensial dan tidak terpisahkan, di mana elektronika berfungsi sebagai tulang punggung dan fondasi fisik yang memungkinkan konsep IoT terealisasi. Tanpa pemahaman elektronika dasar, akan sulit untuk merancang, membangun, dan troubleshooting sistem IoT dengan baik.</p>
+                
+                <h3>Komponen yang Sering Digunakan dalam IoT</h3>
+                
+                <h4>1. Resistor</h4>
+                <p><strong>Resistor</strong> adalah komponen dasar elektronika yang berfungsi untuk membatasi jumlah arus listrik yang mengalir dalam suatu rangkaian. Komponen ini bekerja dengan menghambat aliran arus listrik sesuai dengan nilai resistansinya, yang diukur dalam satuan Ohm (Ω).</p>
+                
+                <h5>Jenis-jenis Resistor:</h5>
+                <ul>
+                    <li><strong>Fixed Resistor (Resistor Tetap):</strong> Nilai resistansinya sudah pasti dan tidak dapat diubah.</li>
+                    <li><strong>Variable Resistor (Resistor Variabel):</strong> Nilai resistansinya dapat diatur atau diubah secara manual atau otomatis.</li>
+                    <li><strong>Thermistor (Thermal Resistor):</strong> Resistor yang nilainya berubah secara signifikan seiring perubahan suhu.</li>
+                    <li><strong>LDR (Light Dependent Resistor) / Photoresistor:</strong> Resistor yang nilainya berubah berdasarkan intensitas cahaya.</li>
+                </ul>
+                
+                <h4>2. Kapasitor</h4>
+                <p><strong>Kapasitor</strong> adalah komponen elektronika yang berfungsi untuk menyimpan energi listrik dalam bentuk medan listrik. Kapasitor terdiri dari dua pelat konduktor yang dipisahkan oleh bahan isolator (disebut dielektrik).</p>
+                
+                <h5>Jenis-jenis Kapasitor:</h5>
+                <ul>
+                    <li><strong>Ceramic Capacitor (Kapasitor Keramik):</strong> Jenis yang paling umum dan murah.</li>
+                    <li><strong>Electrolytic Capacitor (Kapasitor Elektrolitik):</strong> Memiliki kapasitansi yang besar dalam ukuran yang relatif kecil. HARUS dipasang sesuai polaritas.</li>
+                    <li><strong>Tantalum Capacitor:</strong> Mirip dengan elektrolitik tetapi menggunakan tantalum sebagai bahan anoda.</li>
+                    <li><strong>Supercapacitor / Ultracapacitor:</strong> Kapasitor dengan kapasitansi sangat besar (hingga beberapa Farad).</li>
+                </ul>
+                
+                <h4>3. Induktor</h4>
+                <p><strong>Induktor</strong> adalah komponen pasif yang menyimpan energi dalam bentuk medan magnet ketika arus listrik mengalir melaluinya. Induktor terdiri dari kumparan kawat yang dililitkan, sering kali mengelilingi inti magnetik.</p>
+                
+                <h5>Jenis-jenis Induktor:</h5>
+                <ul>
+                    <li><strong>Air Core Inductor (Induktor Inti Udara):</strong> Kumparan tanpa inti material magnetik.</li>
+                    <li><strong>Iron Core Inductor (Induktor Inti Besi):</strong> Menggunakan inti besi untuk meningkatkan induktansi.</li>
+                    <li><strong>Ferrite Core Inductor (Induktor Inti Ferit):</strong> Menggunakan material ferit (keramik magnetik) sebagai inti.</li>
+                </ul>
+                
+                <h4>4. Transistor</h4>
+                <p><strong>Transistor</strong> adalah komponen semikonduktor aktif yang berfungsi sebagai saklar elektronik atau penguat sinyal. Transistor adalah komponen fundamental dalam elektronika modern dan sangat penting dalam sistem IoT untuk switching, amplifikasi, dan regulasi.</p>
+                
+                <h5>Jenis-jenis Transistor:</h5>
+                <ul>
+                    <li><strong>BJT (Bipolar Junction Transistor):</strong> Transistor yang menggunakan arus basis kecil untuk mengontrol arus kolektor yang lebih besar.</li>
+                    <li><strong>FET (Field Effect Transistor):</strong> Transistor yang dikontrol oleh tegangan gate, bukan arus.</li>
+                    <li><strong>MOSFET (Metal-Oxide-Semiconductor FET):</strong> Tipe FET yang paling umum.</li>
+                </ul>
+                
+                <h4>5. Diode</h4>
+                <p><strong>Diode</strong> adalah komponen semikonduktor yang memungkinkan arus listrik mengalir hanya dalam satu arah (dari anoda ke katoda) dan memblokir arus dalam arah sebaliknya.</p>
+                
+                <h5>Jenis-jenis Diode:</h5>
+                <ul>
+                    <li><strong>Rectifier Diode (Diode Penyearah):</strong> Diode umum yang digunakan untuk mengubah AC menjadi DC.</li>
+                    <li><strong>Schottky Diode:</strong> Diode dengan voltage drop yang sangat rendah dan switching speed yang sangat cepat.</li>
+                    <li><strong>Zener Diode:</strong> Diode yang dirancang untuk bekerja dalam mode reverse breakdown pada tegangan tertentu.</li>
+                    <li><strong>LED (Light Emitting Diode):</strong> Diode khusus yang memancarkan cahaya ketika arus forward mengalir melaluinya.</li>
+                </ul>
+                
+                <div class="analogy-box">
+                    <h4>💡 Tips Belajar Elektronika untuk IoT:</h4>
+                    <ol>
+                        <li><strong>Learning by doing:</strong> Beli starter kit Arduino atau NodeMCU dan mulai praktek dengan project sederhana</li>
+                        <li><strong>Gunakan simulator:</strong> Software seperti Tinkercad Circuits atau Proteus untuk simulasi sebelum hardware</li>
+                        <li><strong>Baca datasheet:</strong> Biasakan membaca datasheet komponen untuk spesifikasi lengkap</li>
+                        <li><strong>Pahami rumus dasar:</strong> Hukum Ohm dan rumus daya adalah yang paling sering dipakai</li>
+                        <li><strong>Safety first:</strong> Selalu putuskan power sebelum memodifikasi rangkaian, hati-hati dengan AC voltage</li>
+                    </ol>
+                </div>
+                
+                <h3>Rumus Utama yang Sering Digunakan</h3>
+                
+                <h4>1. Hukum Ohm (Mencari Arus atau Tegangan)</h4>
+                <p><strong>Rumus:</strong></p>
+                <ul>
+                    <li><strong>V = I × R</strong> (Tegangan = Arus × Resistansi)</li>
+                    <li><strong>I = V / R</strong> (Arus = Tegangan / Resistansi)</li>
+                    <li><strong>R = V / I</strong> (Resistansi = Tegangan / Arus)</li>
+                </ul>
+                
+                <h4>2. Rumus Daya Listrik</h4>
+                <p><strong>Rumus:</strong></p>
+                <ul>
+                    <li><strong>P = V × I</strong> (Daya = Tegangan × Arus)</li>
+                    <li><strong>P = I² × R</strong> (Daya = Arus kuadrat × Resistansi)</li>
+                    <li><strong>P = V² / R</strong> (Daya = Tegangan kuadrat / Resistansi)</li>
+                </ul>
+                
+                <h4>3. Rumus Pembagi Tegangan (Voltage Divider)</h4>
+                <p><strong>Rumus:</strong></p>
+                <p><strong>Vout = Vin × (R2 / (R1 + R2))</strong></p>
+                
+                <div class="analogy-box">
+                    <h4>📋 Penutup:</h4>
+                    <p>Dengan memahami materi elektronika dasar ini, remaja masjid siap untuk merancang dan membangun berbagai sistem IoT yang bermanfaat untuk masjid dan umat. Selamat berkarya dan semoga ilmu yang dipelajari menjadi amal jariyah yang bermanfaat!</p>
+                    <p><strong>Wallahu a'lam bishawab.</strong></p>
+                </div>
+            `,
+            quiz: [
+                {
+                    question: "Apa fungsi resistor dalam rangkaian elektronika?",
+                    options: ["Menyimpan energi listrik", "Membatasi jumlah arus listrik", "Mengubah AC menjadi DC", "Menyimpan data"],
+                    correct: 1,
+                    explanation: "Resistor berfungsi untuk membatasi jumlah arus listrik yang mengalir dalam suatu rangkaian."
+                },
+                {
+                    question: "Komponen apa yang berfungsi menyimpan energi dalam bentuk medan listrik?",
+                    options: ["Resistor", "Kapasitor", "Induktor", "Transistor"],
+                    correct: 1,
+                    explanation: "Kapasitor berfungsi menyimpan energi listrik dalam bentuk medan listrik."
+                },
+                {
+                    question: "Apa hukum dasar dalam elektronika yang menghubungkan tegangan, arus, dan resistansi?",
+                    options: ["Hukum Kirchhoff", "Hukum Faraday", "Hukum Ohm", "Hukum Newton"],
+                    correct: 2,
+                    explanation: "Hukum Ohm menghubungkan tegangan (V), arus (I), dan resistansi (R) dengan rumus V = I × R."
+                },
+                {
+                    question: "Diode jenis apa yang memancarkan cahaya ketika arus mengalir?",
+                    options: ["Zener Diode", "Schottky Diode", "LED (Light Emitting Diode)", "Rectifier Diode"],
+                    correct: 2,
+                    explanation: "LED (Light Emitting Diode) memancarkan cahaya ketika arus forward mengalir melaluinya."
+                },
+                {
+                    question: "Apa fungsi transistor dalam sistem IoT?",
+                    options: ["Sebagai sensor suhu", "Sebagai saklar elektronik atau penguat sinyal", "Sebagai sumber daya", "Sebagai display"],
+                    correct: 1,
+                    explanation: "Transistor berfungsi sebagai saklar elektronik atau penguat sinyal dalam sistem IoT."
+                }
+            ]
+        };
+
+        // Tambahkan modul elektronika ke daftar modul
+        modulesData.push(elektronikaModule);
+
+        // ============================================
+        // DATA PRAKTEK
+        // ============================================
+        const practiceData = {
+            1: {
+                title: "Sistem Penyiraman Tanaman Otomatis",
+                components: [
+                    "ESP32 Dev Board",
+                    "Sensor Soil Moisture Analog",
+                    "RTC DS3231 (I2C)",
+                    "Relay 5V Active LOW",
+                    "Pompa air mini 5V",
+                    "Tombol tekan (manual override)",
+                    "Adaptor 5V atau powerbank"
+                ],
+                wiring: `
+                    <h3>Wiring Sistem:</h3>
+                    <ol>
+                        <li><strong>Sensor Tanah → ESP32</strong>
+                            <ul>
+                                <li>VCC → 3.3V</li>
+                                <li>GND → GND</li>
+                                <li>AO → GPIO ADC (GPIO 34)</li>
+                            </ul>
+                        </li>
+                        <li><strong>RTC DS3231 → ESP32</strong>
+                            <ul>
+                                <li>SDA → SDA (GPIO 21)</li>
+                                <li>SCL → SCL (GPIO 22)</li>
+                                <li>VCC → 3.3V</li>
+                                <li>GND → GND</li>
+                            </ul>
+                        </li>
+                        <li><strong>Relay 5V → ESP32</strong>
+                            <ul>
+                                <li>VCC → 5V</li>
+                                <li>GND → GND</li>
+                                <li>IN → GPIO 27</li>
+                            </ul>
+                        </li>
+                    </ol>
+                `,
+                wiringImage: "assets/wiring_diagram_spto.PNG",
+                wiringImageAlt: "Wiring Diagram Sistem Penyiraman Tanaman Otomatis",
+                documentationPdf: "assets/DOKUMENTASI SISTEM PENYIRAMAN TANAMAN OTOMATIS.pdf",
+                documentationTitle: "Dokumentasi Sistem Penyiraman Tanaman Otomatis",
+                codeFile: "assets/code_spto.ino",
+                codeTitle: "Kode Lengkap Sistem Penyiraman Tanaman Otomatis",
+                features: [
+                    "Mode otomatis berdasarkan sensor tanah",
+                    "Mode timer dengan RTC DS3231",
+                    "Kontrol manual via tombol dan web dashboard",
+                    "Web dashboard lokal dengan ESP32",
+                    "Safety timer untuk mencegah pompa menyala terlalu lama",
+                    "Moving average untuk stabilisasi data sensor"
+                ]
+            },
+            2: {
+                title: "Kran Wudhu Otomatis",
+                components: [
+                    "ESP32 Dev Board",
+                    "2x VL53L0X Sensor Jarak",
+                    "OLED Display 128x64 (I2C)",
+                    "Relay 5V",
+                    "Solenoid Valve 12V",
+                    "Tombol Factory Reset",
+                    "Power Supply 12V/5V",
+                    "LED Indikator"
+                ],
+                wiring: `
+                    <h3>Wiring Sistem:</h3>
+                    <ol>
+                        <li><strong>Sensor VL53L0X (Bawah) → ESP32</strong>
+                            <ul>
+                                <li>VCC → 3.3V</li>
+                                <li>GND → GND</li>
+                                <li>SDA → GPIO 21</li>
+                                <li>SCL → GPIO 22</li>
+                                <li>XSHUT → GPIO 32</li>
+                            </ul>
+                        </li>
+                        <li><strong>Sensor VL53L0X (Atas) → ESP32</strong>
+                            <ul>
+                                <li>VCC → 3.3V</li>
+                                <li>GND → GND</li>
+                                <li>SDA → GPIO 21</li>
+                                <li>SCL → GPIO 22</li>
+                                <li>XSHUT → GPIO 33</li>
+                            </ul>
+                        </li>
+                        <li><strong>OLED Display → ESP32</strong>
+                            <ul>
+                                <li>VCC → 3.3V</li>
+                                <li>GND → GND</li>
+                                <li>SDA → GPIO 21</li>
+                                <li>SCL → GPIO 22</li>
+                            </ul>
+                        </li>
+                        <li><strong>Relay → ESP32</strong>
+                            <ul>
+                                <li>IN → GPIO 25</li>
+                                <li>VCC → 5V</li>
+                                <li>GND → GND</li>
+                            </ul>
+                        </li>
+                    </ol>
+                `,
+                wiringImage: "assets/wiring_diagram_kw.PNG",
+                wiringImageAlt: "Wiring Diagram Kran Wudhu Otomatis",
+                documentationPdf: "assets/DOKUMENTASI SISTEM KRAN WUDHU OTOMATIS.pdf",
+                documentationTitle: "Dokumentasi Sistem Kran Wudhu Otomatis",
+                codeFile: "assets/code_kw.ino",
+                codeTitle: "Kode Lengkap Kran Wudhu Otomatis",
+                features: [
+                    "Deteksi tangan otomatis dengan sensor jarak",
+                    "Swipe gesture untuk kontrol manual (mode auto/manual)",
+                    "5x swipe cepat untuk masuk mode konfigurasi AP",
+                    "OLED display untuk status sistem",
+                    "Web dashboard untuk konfigurasi",
+                    "Mode degraded saat salah satu sensor error",
+                    "Safety timeout (max water time)",
+                    "Statistik penggunaan (total aktivasi, durasi, error count)",
+                    "Factory reset via tombol fisik",
+                    "Watchdog timer untuk recovery otomatis"
+                ]
+            },
+            3: {
+                title: "Sistem Lampu Otomatis Masjid",
+                components: [
+                    "ESP32",
+                    "Sensor PIR (gerak)",
+                    "Sensor LDR (cahaya)",
+                    "Relay modul 2 channel",
+                    "Lampu LED 220V",
+                    "Adaptor 5V",
+                    "Kabel jumper"
+                ],
+                wiring: `
+                    <h3>Wiring Sistem:</h3>
+                    <ol>
+                        <li><strong>Sensor PIR → ESP32</strong>
+                            <ul>
+                                <li>VCC → 5V</li>
+                                <li>GND → GND</li>
+                                <li>OUT → GPIO 26</li>
+                            </ul>
+                        </li>
+                        <li><strong>Sensor LDR (dengan pembagi tegangan) → ESP32</strong>
+                            <ul>
+                                <li>Pembagi tegangan → GPIO 34 (ADC)</li>
+                                <li>GND → GND</li>
+                                <li>3.3V → 3.3V</li>
+                            </ul>
+                        </li>
+                        <li><strong>Relay Module → ESP32</strong>
+                            <ul>
+                                <li>IN1 → GPIO 25</li>
+                                <li>IN2 → GPIO 33</li>
+                                <li>VCC → 5V</li>
+                                <li>GND → GND</li>
+                            </ul>
+                        </li>
+                    </ol>
+                `,
+                wiringImage: "assets/wiring_diagram_slm.PNG",
+                wiringImageAlt: "Wiring Diagram Sistem Lampu Masjid",
+                documentationPdf: "assets/DOKUMENTASI_SISTEM_LAMPU_MASJID.pdf",
+                documentationTitle: "Dokumentasi Sistem Lampu Otomatis Masjid",
+                codeFile: "assets/code_slm.ino",
+                codeTitle: "Kode Lengkap Sistem Lampu Masjid",
+                features: [
+                    "Deteksi gerakan dengan sensor PIR",
+                    "Pengukuran intensitas cahaya dengan LDR",
+                    "Kontrol dua channel lampu terpisah",
+                    "Mode otomatis (PIR + LDR)",
+                    "Mode manual via aplikasi",
+                    "Scheduling waktu ON/OFF",
+                    "Energy saving mode"
+                ]
+            }
+        };
+
+        // ============================================
+        // VARIABEL GLOBAL & FUNGSI UTAMA
+        // ============================================
+        let currentQuiz = {
+            moduleId: null,
+            currentQuestion: 0,
+            score: 0,
+            answers: [],
+            quizStarted: false
+        };
+
+        // ============================================
+        // FUNGSI UTILITAS
+        // ============================================
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollToTopOnPageChange() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollToQuizTop() {
+            const quizSection = document.getElementById('quizSection');
+            if (quizSection) {
+                quizSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // ============================================
+        // FUNGSI INISIALISASI
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadModules();
+            setupNavigation();
+            
+            // Tampilkan/sembunyikan tombol scroll to top
+            window.addEventListener('scroll', function() {
+                const scrollTopBtn = document.getElementById('scrollTopBtn');
+                if (scrollTopBtn) {
+                    if (window.scrollY > 300) {
+                        scrollTopBtn.classList.add('show');
+                    } else {
+                        scrollTopBtn.classList.remove('show');
+                    }
+                }
+            });
+        });
+
+        // ============================================
+        // FUNGSI MODUL PEMBELAJARAN
+        // ============================================
+        function loadModules() {
+            const modulesList = document.getElementById('modulesList');
+            modulesList.innerHTML = '';
+            
+            modulesData.forEach(module => {
+                const moduleCard = document.createElement('div');
+                moduleCard.className = 'module-card';
+                moduleCard.onclick = () => openModule(module.id);
+                
+                const progress = Math.floor((module.id / modulesData.length) * 100);
+                
+                moduleCard.innerHTML = `
+                    <div class="module-icon">
+                        <i class="${module.icon}"></i>
+                    </div>
+                    <div class="module-content">
+                        <div class="module-badge">Modul ${module.id}</div>
+                        <h3>${module.title}</h3>
+                        <p>${module.description}</p>
+                        <div class="module-progress">
+                            <div class="progress-bar" style="width: ${progress}%"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span>${module.quiz.length} pertanyaan</span>
+                            <span>${progress}% selesai</span>
+                        </div>
+                    </div>
+                `;
+                
+                modulesList.appendChild(moduleCard);
+            });
+        }
+
+        function openModule(moduleId) {
+            const module = modulesData.find(m => m.id === moduleId);
+            if (!module) return;
+            scrollToTopOnPageChange();
+
+            // Reset quiz state
+            currentQuiz = {
+                moduleId: moduleId,
+                currentQuestion: 0,
+                score: 0,
+                answers: [],
+                quizStarted: false
+            };
+            
+            document.getElementById('modulesPage').classList.remove('active');
+            document.getElementById('moduleContentPage').classList.add('active');
+            
+            const contentPage = document.getElementById('moduleContentPage');
+            contentPage.innerHTML = `
+                <div class="module-header">
+                    <h2>${module.title}</h2>
+                    <p>${module.description}</p>
+                </div>
+                
+                <div class="module-content-container">
+                    ${module.content}
+                </div>
+                
+                ${module.quiz.length > 0 ? `
+                <div class="quiz-section" id="quizSection">
+                    <div class="quiz-header">
+                        <h3>Quiz Pemahaman</h3>
+                        <div class="score-display" id="scoreDisplay">0/${module.quiz.length}</div>
+                    </div>
+                    <div id="quizContent"></div>
+                    <div class="quiz-navigation" id="quizNavigation" style="display: none;">
+                        <button class="btn-secondary" onclick="previousQuestion()" id="prevBtn">
+                            <i class="fas fa-arrow-left"></i> Sebelumnya
+                        </button>
+                        <button class="btn-primary" onclick="nextQuestion()" id="nextBtn">
+                            Lanjut <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div class="module-nav">
+                    ${module.quiz.length > 0 ? `
+                    <button onclick="toggleQuiz(${module.id})">
+                        <i class="fas fa-question-circle"></i> Mulai Quiz
+                    </button>
+                    ` : ''}
+                    <button onclick="markAsComplete(${module.id})">
+                        <i class="fas fa-check-circle"></i> Tandai Selesai
+                    </button>
+                </div>
+                
+                <!-- Tombol Kembali ke Daftar Modul di bagian bawah -->
+                <button class="back-to-modules" onclick="goBackToModules()">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar Modul
+                </button>
+            `;
+            
+            if (module.quiz.length > 0) {
+                loadQuestion(moduleId, 0);
+            }
+        }
+
+        function startLearning() {
+            scrollToTopOnPageChange();
+            // Update navigasi
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelector('[data-page="modulesPage"]').classList.add('active');
+            
+            // Tampilkan halaman modul
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('modulesPage').classList.add('active');
+        }
+
+        // ============================================
+        // FUNGSI QUIZ
+        // ============================================
+        function loadQuestion(moduleId, questionIndex) {
+            const module = modulesData.find(m => m.id === moduleId);
+            if (!module || !module.quiz[questionIndex]) return;
+            
+            const question = module.quiz[questionIndex];
+            const quizContent = document.getElementById('quizContent');
+            
+            let quizHTML = `
+                <div class="question-container">
+                    <div class="question-text">${questionIndex + 1}. ${question.question}</div>
+                    <div class="options-container" id="options_${questionIndex}">
+                        ${question.options.map((option, optIndex) => `
+                            <div class="option" onclick="selectOption(${questionIndex}, ${optIndex})" id="option_${questionIndex}_${optIndex}">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback_${questionIndex}"></div>
+                </div>
+            `;
+            
+            quizContent.innerHTML = quizHTML;
+            
+            // Update score display
+            document.getElementById('scoreDisplay').textContent = `${currentQuiz.score}/${module.quiz.length}`;
+            
+            // Show navigation if not first question or quiz started
+            const quizNavigation = document.getElementById('quizNavigation');
+            if (currentQuiz.quizStarted || questionIndex > 0) {
+                quizNavigation.style.display = 'flex';
+            }
+            
+            // Update button text for last question
+            const nextBtn = document.getElementById('nextBtn');
+            if (questionIndex === module.quiz.length - 1) {
+                nextBtn.innerHTML = 'Selesai <i class="fas fa-check"></i>';
+            } else {
+                nextBtn.innerHTML = 'Lanjut <i class="fas fa-arrow-right"></i>';
+            }
+            
+            // Show/hide previous button
+            const prevBtn = document.getElementById('prevBtn');
+            prevBtn.style.display = questionIndex > 0 ? 'block' : 'none';
+            
+            // Restore selected answer if exists
+            if (currentQuiz.answers[questionIndex] !== undefined) {
+                const selectedOption = document.getElementById(`option_${questionIndex}_${currentQuiz.answers[questionIndex]}`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                    
+                    // Show feedback if already answered
+                    const feedback = document.getElementById(`feedback_${questionIndex}`);
+                    if (currentQuiz.answers[questionIndex] === question.correct) {
+                        feedback.textContent = `✓ Benar! ${question.explanation}`;
+                        feedback.className = 'feedback correct';
+                        feedback.style.display = 'block';
+                    } else {
+                        feedback.textContent = `✗ Salah. ${question.explanation}`;
+                        feedback.className = 'feedback incorrect';
+                        feedback.style.display = 'block';
+                    }
+                }
+            }
+        }
+
+        function toggleQuiz(moduleId) {
+            const quizSection = document.getElementById('quizSection');
+            const module = modulesData.find(m => m.id === moduleId);
+            
+            if (quizSection && module) {
+                if (quizSection.classList.contains('active')) {
+                    // Tutup quiz
+                    quizSection.classList.remove('active');
+                    currentQuiz.quizStarted = false;
+                } else {
+                    // Buka quiz - RESET KE AWAL
+                    currentQuiz = {
+                        moduleId: moduleId,
+                        currentQuestion: 0,
+                        score: 0,
+                        answers: [],
+                        quizStarted: true
+                    };
+                    
+                    quizSection.classList.add('active');
+                    loadQuestion(moduleId, 0);
+                    
+                    // Scroll ke atas quiz section
+                    setTimeout(() => {
+                        scrollToQuizTop();
+                    }, 100);
+                }
+            }
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            if (currentQuiz.answers[questionIndex] !== undefined) {
+                return; // Already answered
+            }
+            
+            const module = modulesData.find(m => m.id === currentQuiz.moduleId);
+            const question = module.quiz[questionIndex];
+            
+            // Remove selected class from all options
+            const options = document.querySelectorAll(`#options_${questionIndex} .option`);
+            options.forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Add selected class to chosen option
+            const selectedOption = document.getElementById(`option_${questionIndex}_${optionIndex}`);
+            selectedOption.classList.add('selected');
+            
+            // Check answer and show feedback
+            const feedback = document.getElementById(`feedback_${questionIndex}`);
+            
+            if (optionIndex === question.correct) {
+                selectedOption.classList.add('correct');
+                feedback.textContent = `✓ Benar! ${question.explanation}`;
+                feedback.className = 'feedback correct';
+                currentQuiz.score++;
+            } else {
+                selectedOption.classList.add('incorrect');
+                feedback.textContent = `✗ Salah. ${question.explanation}`;
+                feedback.className = 'feedback incorrect';
+                
+                // Also highlight correct answer
+                const correctOption = document.getElementById(`option_${questionIndex}_${question.correct}`);
+                if (correctOption) {
+                    correctOption.classList.add('correct');
+                }
+            }
+            
+            feedback.style.display = 'block';
+            
+            // Save answer
+            currentQuiz.answers[questionIndex] = optionIndex;
+            
+            // Update score display
+            document.getElementById('scoreDisplay').textContent = `${currentQuiz.score}/${module.quiz.length}`;
+            
+            // Show navigation
+            document.getElementById('quizNavigation').style.display = 'flex';
+        }
+
+        function nextQuestion() {
+            const module = modulesData.find(m => m.id === currentQuiz.moduleId);
+            
+            if (currentQuiz.currentQuestion < module.quiz.length - 1) {
+                currentQuiz.currentQuestion++;
+                loadQuestion(currentQuiz.moduleId, currentQuiz.currentQuestion);
+                
+                // Scroll ke atas quiz section
+                setTimeout(() => {
+                    scrollToQuizTop();
+                }, 50);
+            } else {
+                // End of quiz
+                alert(`Quiz selesai! Skor akhir: ${currentQuiz.score}/${module.quiz.length}`);
+                document.getElementById('quizSection').classList.remove('active');
+                currentQuiz.quizStarted = false;
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuiz.currentQuestion > 0) {
+                currentQuiz.currentQuestion--;
+                loadQuestion(currentQuiz.moduleId, currentQuiz.currentQuestion);
+                
+                // Scroll ke atas quiz section
+                setTimeout(() => {
+                    scrollToQuizTop();
+                }, 50);
+            }
+        }
+
+        function markAsComplete(moduleId) {
+            alert(`Modul ${moduleId} telah ditandai sebagai selesai!`);
+        }
+
+        // ============================================
+        // FUNGSI DOWNLOAD MATERI LENGKAP
+        // ============================================
+        function downloadFullIoTMaterial() {
+            const fileName = "Materi_Utama_Pembelajaran_IoT_untuk_Remaja_Masjid.pdf";
+            const filePath = "assets/Materi Utama Pembelajaran IoT untuk Remaja Masjid.pdf";
+            
+            // Membuat link untuk download
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.download = fileName;
+            link.target = '_blank';
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Notifikasi
+            alert(`Materi Utama IoT sedang diunduh...\n\nFile: ${fileName}`);
+        }
+
+        function downloadElectronicsMaterial() {
+            const fileName = "Materi_Pendukung_Pemahaman_Dasar_Elektronika.pdf";
+            const filePath = "assets/Materi Pendukung Pemahaman Dasar Elektronika.pdf";
+            
+            // Membuat link untuk download
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.download = fileName;
+            link.target = '_blank';
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Notifikasi
+            alert(`Materi Pendukung Elektronika sedang diunduh...\n\nFile: ${fileName}`);
+        }
+
+        // ============================================
+        // FUNGSI PRAKTEK
+        // ============================================
+        function openPractice(practiceId) {
+        const practice = practiceData[practiceId];
+        if (!practice) return;
+        scrollToTopOnPageChange();
+
+        document.getElementById('practicePage').classList.remove('active');
+        document.getElementById('moduleContentPage').classList.add('active');
+        
+        const contentPage = document.getElementById('moduleContentPage');
+        contentPage.innerHTML = `
+            <div class="module-header">
+                <h2>${practice.title}</h2>
+            </div>
+            
+            <div class="module-content-container">
+                <h3>Komponen yang Dibutuhkan:</h3>
+                <ul>
+                    ${practice.components.map(component => `<li>${component}</li>`).join('')}
+                </ul>
+                
+                ${practice.wiring || ''}
+                
+                <div style="margin: 1.5rem 0; display: flex; flex-wrap: wrap; gap: 10px;">
+                    <!-- Tombol untuk melihat wiring diagram -->
+                    <button class="btn-primary" onclick="showWiringDiagram(${practiceId})">
+                        <i class="fas fa-project-diagram"></i> Lihat Wiring Diagram
+                    </button>
+                    
+                    <!-- Tombol untuk mengunduh dokumentasi PDF -->
+                    <button class="btn-secondary" onclick="downloadDocumentation(${practiceId})">
+                        <i class="fas fa-file-pdf"></i> Unduh Dokumentasi (PDF)
+                    </button>
+                    
+                    <!-- Tombol untuk mengunduh kode lengkap -->
+                    <button class="btn-primary" onclick="downloadCodeFile(${practiceId})" style="background-color: var(--primary-dark);">
+                        <i class="fas fa-code"></i> Unduh Kode Lengkap (.ino)
+                    </button>
+                </div>
+                
+                <!-- Container untuk preview wiring diagram -->
+                <div id="wiringDiagramPreview" style="display: none; margin: 1.5rem 0; text-align: center;">
+                    <h4>Preview Wiring Diagram</h4>
+                    <div style="background: white; padding: 15px; border-radius: var(--border-radius); box-shadow: var(--box-shadow);">
+                        <img src="${practice.wiringImage}" 
+                            alt="${practice.wiringImageAlt}" 
+                            style="max-width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="color: var(--gray-color); font-size: 0.9rem;">
+                            <i class="fas fa-info-circle"></i> Wiring diagram ini hanya untuk preview. Untuk detail lengkap, unduh dokumentasi PDF.
+                        </p>
+                        <button class="btn-secondary" onclick="closeWiringPreview()" style="margin-top: 10px;">
+                            <i class="fas fa-times"></i> Tutup Preview
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="analogy-box">
+                    <h4>📋 Deskripsi Singkat:</h4>
+                    <p>Proyek ${practice.title} adalah implementasi praktis IoT untuk otomatisasi. File-file yang tersedia:</p>
+                    <ul>
+                        <li><strong>Wiring Diagram</strong> (.PNG) - Gambar skema rangkaian elektronik</li>
+                        <li><strong>Dokumentasi</strong> (.PDF) - Panduan lengkap instalasi dan penggunaan</li>
+                        <li><strong>Kode Program</strong> (.ino) - Sketch Arduino untuk diupload ke ESP32</li>
+                    </ul>
+                </div>
+                
+                <h3>Fitur Sistem:</h3>
+                <ul>
+                    ${practice.features.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
+                
+                <div class="analogy-box">
+                    <h4>📋 Langkah-Langkah Praktik:</h4>
+                    <ol>
+                        <li>Unduh semua file yang diperlukan (dokumentasi dan kode)</li>
+                        <li>Baca dokumentasi PDF terlebih dahulu</li>
+                        <li>Siapkan semua komponen dan alat yang dibutuhkan</li>
+                        <li>Pasang wiring sesuai diagram yang tersedia</li>
+                        <li>Upload kode program ke ESP32</li>
+                        <li>Testing fungsi dasar sistem</li>
+                        <li>Kalibrasi sensor jika diperlukan</li>
+                    </ol>
+                </div>
+                
+                <div style="margin-top: 2rem; padding: 1rem; background: #E3F2FD; border-radius: 8px;">
+                    <h4>⚠️ Tips Keamanan:</h4>
+                    <ul>
+                        <li>Matikan semua catu daya sebelum menyambung kabel</li>
+                        <li>Pastikan polaritas komponen sudah benar</li>
+                        <li>Gunakan power supply yang sesuai dengan kebutuhan arus</li>
+                        <li>Jauhkan komponen elektronik dari air dan kelembapan</li>
+                        <li>Jika menggunakan tegangan 220V, berhati-hatilah!</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="module-nav">
+                <button onclick="simulatePractice(${practiceId})">
+                    <i class="fas fa-play"></i> Simulasi Praktik
+                </button>
+                <button onclick="printInstructions(${practiceId})">
+                    <i class="fas fa-print"></i> Cetak Instruksi
+                </button>
+            </div>
+            
+            <!-- Tombol Kembali ke Praktik di bagian bawah -->
+            <button class="back-to-modules" onclick="goBackToPractice()" style="background-color: var(--accent-color);">
+                <i class="fas fa-arrow-left"></i> Kembali ke Halaman Praktik
+            </button>
+        `;
+    }
+
+        // ============================================
+        // FUNGSI UNTUK FILE & PREVIEW
+        // ============================================
+
+        function showWiringDiagram(practiceId) {
+            const practice = practiceData[practiceId];
+            const previewDiv = document.getElementById('wiringDiagramPreview');
+            
+            if (previewDiv) {
+                // Update gambar jika perlu
+                const img = previewDiv.querySelector('img');
+                if (img) {
+                    img.src = practice.wiringImage;
+                    img.alt = practice.wiringImageAlt;
+                }
+                
+                previewDiv.style.display = 'block';
+                
+                // Scroll ke preview
+                previewDiv.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        function closeWiringPreview() {
+            const previewDiv = document.getElementById('wiringDiagramPreview');
+            if (previewDiv) {
+                previewDiv.style.display = 'none';
+            }
+        }
+
+        function downloadDocumentation(practiceId) {
+            const practice = practiceData[practiceId];
+            if (!practice || !practice.documentationPdf) {
+                alert('File dokumentasi tidak tersedia.');
+                return;
+            }
+            
+            // Membuat link untuk download
+            const link = document.createElement('a');
+            link.href = practice.documentationPdf;
+            link.download = practice.documentationTitle.replace(/\s+/g, '_') + '.pdf';
+            link.target = '_blank';
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Notifikasi
+            alert(`Dokumentasi "${practice.documentationTitle}" sedang diunduh...`);
+        }
+
+        function downloadCodeFile(practiceId) {
+            const practice = practiceData[practiceId];
+            if (!practice || !practice.codeFile) {
+                alert('File kode tidak tersedia.');
+                return;
+            }
+            
+            // Membuat link untuk download
+            const link = document.createElement('a');
+            link.href = practice.codeFile;
+            link.download = practice.codeTitle.replace(/\s+/g, '_') + '.ino';
+            link.target = '_blank';
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Notifikasi
+            alert(`Kode program "${practice.codeTitle}" sedang diunduh...`);
+        }
+
+        function printInstructions(practiceId) {
+            const practice = practiceData[practiceId];
+            
+            const printContent = `
+                <html>
+                <head>
+                    <title>Instruksi Praktik - ${practice.title}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h1 { color: #2E7D32; }
+                        .section { margin-bottom: 20px; }
+                        .components { background: #f5f5f5; padding: 15px; border-radius: 5px; }
+                        .warning { color: #f44336; font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${practice.title}</h1>
+                    <div class="section">
+                        <h3>Komponen yang Dibutuhkan:</h3>
+                        <ul class="components">
+                            ${practice.components.map(comp => `<li>${comp}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="section">
+                        <h3>Langkah-Langkah:</h3>
+                        <ol>
+                            <li>Unduh wiring diagram dan dokumentasi dari platform</li>
+                            <li>Unduh kode program (.ino file)</li>
+                            <li>Siapkan semua komponen sesuai daftar</li>
+                            <li>Rangkai komponen sesuai wiring diagram</li>
+                            <li>Upload kode ke ESP32 menggunakan Arduino IDE</li>
+                            <li>Testing sistem secara bertahap</li>
+                        </ol>
+                    </div>
+                    <div class="section warning">
+                        <h3>⚠️ PERINGATAN KESELAMATAN:</h3>
+                        <p>1. Selalu matikan daya sebelum merangkai kabel</p>
+                        <p>2. Periksa polaritas semua komponen</p>
+                        <p>3. Gunakan power supply yang sesuai</p>
+                        <p>4. Hindari kontak dengan air saat testing</p>
+                    </div>
+                    <p><strong>Tanggal Cetak:</strong> ${new Date().toLocaleDateString('id-ID')}</p>
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.focus();
+            
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
+        }
+
+        function simulatePractice(practiceId) {
+            alert(`Simulasi praktek ${practiceData[practiceId].title} akan segera tersedia!`);
+        }
+
+        // ============================================
+        // FUNGSI NAVIGASI & UMUM
+        // ============================================
+        function openWhatsApp(phoneNumber, name) {
+            const message = `Assalamualaikum ${name}, Saya peserta IoT IRMAL, Mau bertanya:`;
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function goBackToModules() {
+            scrollToTopOnPageChange();
+            // Reset quiz state when leaving module
+            currentQuiz = {
+                moduleId: null,
+                currentQuestion: 0,
+                score: 0,
+                answers: [],
+                quizStarted: false
+            };
+            
+            document.getElementById('moduleContentPage').classList.remove('active');
+            document.getElementById('modulesPage').classList.add('active');
+            document.getElementById('moduleContentPage').innerHTML = '';
+        }
+
+        function goBackToPractice() {
+            scrollToTopOnPageChange();
+            document.getElementById('moduleContentPage').classList.remove('active');
+            document.getElementById('practicePage').classList.add('active');
+            document.getElementById('moduleContentPage').innerHTML = '';
+        }
+
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const pageId = this.getAttribute('data-page');
+                    
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected page
+                    document.querySelectorAll('.page-content').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    document.getElementById(pageId).classList.add('active');
+                    
+                    // Scroll to top setelah berpindah halaman
+                    scrollToTopOnPageChange();
+                });
+            });
+            // ============================================
+            // PWA FEATURES
+            // ============================================
+
+            // Install Prompt
+            let deferredPrompt;
+            const installButton = document.createElement('button');
+            installButton.id = 'installButton';
+            installButton.style.cssText = `
+                position: fixed;
+                bottom: 140px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                background-color: var(--secondary-color);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                font-size: 1.2rem;
+                cursor: pointer;
+                box-shadow: var(--box-shadow);
+                z-index: 99;
+                display: none;
+                align-items: center;
+                justify-content: center;
+            `;
+            installButton.innerHTML = '<i class="fas fa-download"></i>';
+
+            // Tambahkan tooltip
+            installButton.title = 'Install Aplikasi IoT IRMAL';
+
+            document.body.appendChild(installButton);
+
+            // Listen for install prompt
+            window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('[PWA] beforeinstallprompt fired');
+                // Prevent Chrome 67 and earlier from automatically showing the prompt
+                e.preventDefault();
+                // Stash the event so it can be triggered later
+                deferredPrompt = e;
+                
+                // Show install button
+                installButton.style.display = 'flex';
+                
+                // Auto-hide after 10 seconds
+                setTimeout(() => {
+                    installButton.style.display = 'none';
+                }, 10000);
+            });
+
+            // Install button click handler
+            installButton.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                
+                // Show the install prompt
+                deferredPrompt.prompt();
+                
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`[PWA] User response to the install prompt: ${outcome}`);
+                
+                // Hide the install button
+                installButton.style.display = 'none';
+                
+                // We've used the prompt, and can't use it again, clear it
+                deferredPrompt = null;
+            });
+
+            // Check if app is installed
+            window.addEventListener('appinstalled', (evt) => {
+                console.log('[PWA] App was installed');
+                installButton.style.display = 'none';
+                
+                // Show welcome message
+                showNotification('Aplikasi IoT IRMAL berhasil diinstall!', 'success');
+            });
+
+            // Online/Offline Detection
+            function updateOnlineStatus() {
+                const status = navigator.onLine ? 'online' : 'offline';
+                console.log(`[PWA] Network status: ${status}`);
+                
+                if (!navigator.onLine) {
+                    showNotification('Anda sedang offline. Beberapa fitur mungkin terbatas.', 'warning');
+                } else {
+                    showNotification('Koneksi internet telah pulih.', 'success');
+                }
+            }
+
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+
+            // Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('service-worker.js')
+                        .then(function(registration) {
+                            console.log('[PWA] ServiceWorker registration successful with scope: ', registration.scope);
+                            
+                            // Check for updates
+                            registration.addEventListener('updatefound', () => {
+                                const newWorker = registration.installing;
+                                console.log('[PWA] New service worker found');
+                                
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // New update available
+                                        showUpdateNotification();
+                                    }
+                                });
+                            });
+                        })
+                        .catch(function(err) {
+                            console.log('[PWA] ServiceWorker registration failed: ', err);
+                        });
+                });
+            }
+
+            // Notification System
+            function showNotification(message, type = 'info') {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `pwa-notification pwa-notification-${type}`;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'success' ? '#4CAF50' : type === 'warning' ? '#FF9800' : '#2196F3'};
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 9999;
+                    max-width: 300px;
+                    animation: slideIn 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                `;
+                
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => notification.remove(), 300);
+                }, 5000);
+            }
+
+            // Update notification
+            function showUpdateNotification() {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 80px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: white;
+                    color: var(--dark-color);
+                    padding: 15px;
+                    border-radius: var(--border-radius);
+                    box-shadow: var(--box-shadow);
+                    z-index: 9999;
+                    max-width: 90%;
+                    text-align: center;
+                    animation: fadeInUp 0.3s ease;
+                `;
+                
+                notification.innerHTML = `
+                    <h4 style="margin-bottom: 10px; color: var(--primary-color);">
+                        <i class="fas fa-sync-alt"></i> Update Tersedia
+                    </h4>
+                    <p style="margin-bottom: 15px;">Versi baru aplikasi tersedia. Refresh untuk update?</p>
+                    <button onclick="location.reload()" class="btn-primary" style="padding: 8px 16px; margin-right: 10px;">
+                        <i class="fas fa-redo"></i> Refresh
+                    </button>
+                    <button onclick="this.parentElement.remove()" class="btn-secondary" style="padding: 8px 16px;">
+                        <i class="fas fa-times"></i> Nanti
+                    </button>
+                `;
+                
+                document.body.appendChild(notification);
+            }
+
+            // Add animations to CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+                
+                @keyframes fadeInUp {
+                    from { transform: translate(-50%, 20px); opacity: 0; }
+                    to { transform: translate(-50%, 0); opacity: 1; }
+                }
+                
+                #installButton:hover {
+                    background-color: var(--primary-dark);
+                    transform: scale(1.1);
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Initial check
+            updateOnlineStatus();
+        }
+    </script>
+</body>
+</html>
